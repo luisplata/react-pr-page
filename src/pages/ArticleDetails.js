@@ -6,6 +6,7 @@ import Services from "../components/Services";
 import Map from "../components/Map";
 import Comments from "../components/Comments";
 import Experiences from "../components/Experiences";
+import Footer from "../components/Footer";
 
 const ArticleDetails = () => {
   const { id } = useParams();
@@ -40,6 +41,8 @@ const ArticleDetails = () => {
     { type: "video", src: "https://videos.pexels.com/video-files/3195394/3195394-uhd_2560_1440_25fps.mp4" },
   ];
 
+  const globalLocation = { lat: 19.432608, lng: -99.133209 };
+
   const [mostrarCompleto, setMostrarCompleto] = useState(false);
 
   const toggleDescripcion = () => {
@@ -52,7 +55,6 @@ const ArticleDetails = () => {
         <article>
         <div className="container mt-5">
       <div className="row">
-        {/* Imagen a la izquierda */}
         <div className="col-md-3 text-center">
           <img
             src={ejemploPersona.imagen}
@@ -60,18 +62,15 @@ const ArticleDetails = () => {
             className="img-fluid rounded-circle"
           />
         </div>
-        {/* Descripción al centro */}
         <div className="col-md-6">
-          {/* Nombre */}
           <h4>{name}</h4>
-          {/* Categorías */}
           <div className="">
             {ejemploPersona.categorias.map((categoria, index) => (
               <span
                 key={index}
                 className="badge text-light me-1"
                 style={{
-                  backgroundColor: "#007bff",
+                  backgroundColor: "#038093",
                   padding: "5px 5px",
                   borderRadius: "5px",
                 }}
@@ -80,14 +79,13 @@ const ArticleDetails = () => {
               </span>
             ))}
           </div>
-          {/* Servicios */}
           <div>
             {ejemploPersona.servicios.map((servicio, index) => (
               <span
                 key={index}
                 className="badge text-dark me-1"
                 style={{
-                  backgroundColor: "#f1f1f1",
+                  backgroundColor: "#eff0f5",
                   padding: "5px 5px",
                   borderRadius: "5px",
                   display: "inline-block",
@@ -102,7 +100,6 @@ const ArticleDetails = () => {
           </div>
 
           <div className="row mt-3">
-            {/* Descripción de la persona */}
             <div className="col-md-8">
               <h5>Descripción</h5>
               <p>
@@ -120,7 +117,6 @@ const ArticleDetails = () => {
               </p>
               
             </div>
-            {/* Horario disponible */}
             <div className="col-md-4">
               <h5>Horario Disponible</h5>
               <p>{ejemploPersona.horarioDisponible}</p>
@@ -128,7 +124,6 @@ const ArticleDetails = () => {
           </div>
         </div>
         
-        {/* Costo por hora a la derecha */}
         <div className="col-md-3 text-center">
           <h3>${ejemploPersona.costoPorHora} / hora</h3>
         </div>
@@ -136,7 +131,6 @@ const ArticleDetails = () => {
     </div>
 
     <div className="container mt-5">
-      {/* Navbar centrada */}
       <nav className="navbar navbar-expand-lg navbar-light">
         <div className="container custom-container justify-content-center">
           <ul className="navbar-nav bg-light p-1 rounded-4">
@@ -159,7 +153,6 @@ const ArticleDetails = () => {
         </div>
       </nav>
 
-        {/* Secciones */}
         <Galery items={items}/>
         <Services services={["element 1", "element 2", "element 3", "element 4", "element 5"]}
             subServices={[
@@ -168,11 +161,13 @@ const ArticleDetails = () => {
             { name: "SubServicio 3", list: ["element 1", "element 2", "element 3", "element 4", "element 5" ]},
             { name: "Adicionales", list: ["element 1", "element 2", "element 3", "element 4", "element 5" ]},
         ]} />
-        <Map />
+        <Map location={globalLocation}/>
         <Comments />
         <Experiences />
     </div>
         </article>
+    
+        <Footer></Footer>
     </div>
     );
 };

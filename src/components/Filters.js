@@ -4,7 +4,7 @@ const Filters = ({ setFilters }) => {
     const [searchName, setSearchName] = useState("");
     const [selectedZone, setSelectedZone] = useState("");
     const [selectedCategories, setSelectedCategories] = useState([]);
-    const [activeFilter, setActiveFilter] = useState(null); // Para manejar qué filtro está abierto
+    const [activeFilter, setActiveFilter] = useState(null);
     const buttonRefs = {
         name: useRef(null),
         zone: useRef(null),

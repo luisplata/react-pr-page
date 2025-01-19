@@ -5,10 +5,10 @@ const ArticleList = ({ quality, articles }) => {
     return (
         <section id={`calidad-${quality}`} className="my-5">
             <div className="container">
-                <h2 className="text-left mb-4 ms-3">{quality}</h2>
-                <div className="row">
+                <h2 className="text-left mb-4 ms-4">{quality}</h2>
+                <div >
                     {articles.map((article, index) => (
-                        <div className="col-md-2 mb-4" key={index}>
+                        <div className="mb-4 d-inline-flex" key={index}>
                             <Article
                                 id={article.id}
                                 name={article.name}

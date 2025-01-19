@@ -50,7 +50,7 @@ const styles = {
         left: 0,
         width: "100%",
         height: "20%",
-        backgroundColor: "rgba(0, 0, 0, 0)", // Fondo semitransparente
+        backgroundColor: "rgba(0, 0, 0, 0)",
         color: "white",
         display: "flex",
         flexDirection: "column",
