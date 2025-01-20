@@ -74,6 +74,10 @@ const Home = () => {
     return (
         <div>
             <Header></Header>
+            <div className="container ps-5">
+                <h3>Articulos Mexico</h3>
+                
+            </div>
             <Filters setFilters={setFilters} />
             <ArticleList quality="Alta Calidad" articles={filteredArticles} />
             <ArticleList quality="Media Calidad" articles={filteredArticles} />

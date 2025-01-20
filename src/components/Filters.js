@@ -11,7 +11,7 @@ const Filters = ({ setFilters }) => {
         category: useRef(null),
     };
 
-    // Filtros de zonas y categorías
+ 
     const zones = ["Zona 1", "Zona 2", "Zona 3"];
     const categories = ["Categoria 1", "Categoria 2", "Categoria 3"];
 
@@ -45,12 +45,11 @@ const Filters = ({ setFilters }) => {
         });
     };
 
-    // Maneja la apertura de cada filtro
     const handleFilterToggle = (filterName) => {
         if (activeFilter === filterName) {
-            setActiveFilter(null); // Cierra el filtro si ya está abierto
+            setActiveFilter(null); 
         } else {
-            setActiveFilter(filterName); // Abre el filtro seleccionado
+            setActiveFilter(filterName); 
         }
     };
 
@@ -59,8 +58,8 @@ const Filters = ({ setFilters }) => {
         if (button) {
             const rect = button.getBoundingClientRect();
             return {
-                top: rect.bottom + window.scrollY, // Posiciona debajo del botón
-                left: rect.left + window.scrollX,  // Alinea al lado izquierdo del botón
+                top: rect.bottom + window.scrollY,
+                left: rect.left + window.scrollX, 
             };
         }
         return { top: 0, left: 0 };
@@ -69,38 +68,46 @@ const Filters = ({ setFilters }) => {
     return (
         <div className="container mt-4">
             <div className="d-flex justify-content-start mb-3 ms-3">
-                {/* Filtro por nombre */}
                 <button
                     ref={buttonRefs.name}
-                    className="btn btn-outline-primary"
-                    style={{ width: "auto" }}
+                    className="btn me-2"
+                    type="button"
+                    style={{ width: "auto" ,
+                        backgroundColor: "rgba(3, 128, 147, 0.4)",
+                        color: "rgb(3, 128, 147)"
+                    }}
                     onClick={() => handleFilterToggle("name")}
                 >
-                    Filtro por Nombre
+                    Nombre
                 </button>
 
-                {/* Filtro por zona */}
                 <button
                     ref={buttonRefs.zone}
-                    className="btn btn-outline-primary ms-2"
-                    style={{ width: "auto" }}
+                    className="btn me-2"
+                    type="button"
+                    style={{ width: "auto" ,
+                        backgroundColor: "rgba(3, 128, 147, 0.4)",
+                        color: "rgb(3, 128, 147)"
+                     }}
                     onClick={() => handleFilterToggle("zone")}
                 >
-                    Filtro por Zona
+                    Zona
                 </button>
 
-                {/* Filtro por categoría */}
                 <button
                     ref={buttonRefs.category}
-                    className="btn btn-outline-primary ms-2"
-                    style={{ width: "auto" }}
+                    className="btn me-2"
+                    type="button"
+                    style={{ width: "auto" ,
+                        backgroundColor: "rgba(3, 128, 147, 0.4)",
+                        color: "rgb(3, 128, 147)"
+                     }}
                     onClick={() => handleFilterToggle("category")}
                 >
-                    Filtro por Categoría
+                    Categoría
                 </button>
             </div>
 
-            {/* Filtro por nombre flotante */}
             {activeFilter === "name" && (
                 <div
                     className="position-absolute mt-2 p-3 bg-white border rounded shadow"
@@ -121,7 +128,6 @@ const Filters = ({ setFilters }) => {
                 </div>
             )}
 
-            {/* Filtro por zona flotante */}
             {activeFilter === "zone" && (
                 <div
                     className="position-absolute mt-2 p-3 bg-white border rounded shadow"
@@ -146,7 +152,6 @@ const Filters = ({ setFilters }) => {
                 </div>
             )}
 
-            {/* Filtro por categoría flotante */}
             {activeFilter === "category" && (
                 <div
                     className="position-absolute mt-2 p-3 bg-white border rounded shadow"

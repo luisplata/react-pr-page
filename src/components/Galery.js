@@ -8,7 +8,7 @@ const Galeria = ({ items }) => {
   );
 
   return (
-    <div id="galeria" style={{ padding: "20px", backgroundColor: "#f9f9f9" }}>
+    <div id="galeria" style={{ padding: "20px"}}>
       <h2 className="mb-3">Galería</h2>
 
       <div style={{ marginBottom: "20px", display: "flex", gap: "10px" }}>

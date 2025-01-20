@@ -52,7 +52,7 @@ const ArticleDetails = () => {
   return (
     <div>
         <Header></Header>
-        <article>
+        <article className="container-fluid">
         <div className="container mt-5">
       <div className="row">
         <div className="col-md-3 text-center">
@@ -164,7 +164,7 @@ const ArticleDetails = () => {
         <Map location={globalLocation}/>
         <Comments />
         <Experiences />
-    </div>
+        </div>
         </article>
     
         <Footer></Footer>
