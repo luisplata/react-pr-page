@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+//import { useParams, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Header from "../components/Header";
 import Galery from "../components/Galery";
 import Services from "../components/Services";
