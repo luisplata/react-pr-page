@@ -9,7 +9,7 @@ import Experiences from "../components/Experiences";
 import Footer from "../components/Footer";
 
 const ArticleDetails = () => {
-  const { id } = useParams();
+  //const { id } = useParams();
   const location = useLocation();
   const { name } = location.state || {};
   const ejemploPersona = {
