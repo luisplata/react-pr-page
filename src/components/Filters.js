@@ -110,7 +110,7 @@ const Filters = ({ setFilters }) => {
 
             {activeFilter === "name" && (
                 <div
-                    className="position-absolute mt-2 p-3 bg-white border rounded shadow"
+                    className="position-absolute mt-2 p-1 bg-light border-0 rounded shadow"
                     style={{
                         zIndex: 1050,
                         top: `${getFilterPosition("name").top}px`,
@@ -120,17 +120,17 @@ const Filters = ({ setFilters }) => {
                 >
                     <input
                         type="text"
-                        className="form-control"
+                        className="form-control t-0 bg-light rounded-4"
                         value={searchName}
                         onChange={handleSearchChange}
-                        placeholder="Escribe el nombre del artículo"
                     />
+                    <div className="m-2">Escribe por lo menos 3 letras</div>
                 </div>
             )}
 
             {activeFilter === "zone" && (
                 <div
-                    className="position-absolute mt-2 p-3 bg-white border rounded shadow"
+                    className="position-absolute mt-2 p-3 bg-light rounded shadow"
                     style={{
                         zIndex: 1050,
                         top: `${getFilterPosition("zone").top}px`,
@@ -138,7 +138,7 @@ const Filters = ({ setFilters }) => {
                     }}
                 >
                     <select
-                        className="form-select"
+                        className="form-select bg-light"
                         value={selectedZone}
                         onChange={handleZoneChange}
                     >
@@ -154,7 +154,7 @@ const Filters = ({ setFilters }) => {
 
             {activeFilter === "category" && (
                 <div
-                    className="position-absolute mt-2 p-3 bg-white border rounded shadow"
+                    className="position-absolute mt-2 p-3 bg-light rounded shadow"
                     style={{
                         zIndex: 1050,
                         top: `${getFilterPosition("category").top}px`,

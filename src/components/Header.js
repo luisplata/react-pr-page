@@ -20,10 +20,10 @@ const Header = () => {
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav ms-auto">
                         <li className="nav-item">
-                            <a className="nav-link fs-5 ms-3" href="#calidad-2"><i className="bi bi-house-fill me-2"></i>Novedades</a>
+                            <a className="nav-link fs-5 ms-3" href="/feed"><i className="bi bi-house-fill me-2"></i>Novedades</a>
                         </li> 
                         <li className="nav-item">
-                            <a className="nav-link fs-5 ms-3" href="#calidad-2"><i className="bi bi-youtube me-2"></i>Videos</a>
+                            <a className="nav-link fs-5 ms-3" href="/records"><i className="bi bi-youtube me-2"></i>Videos</a>
                         </li>
                         <li className="nav-item">
                             <a className="nav-link fs-5 ms-3" href="#calidad-3"><i className="bi bi-camera-video-fill me-2"></i>Videollamadas</a>
