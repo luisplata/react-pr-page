@@ -11,7 +11,7 @@ const Galeria = ({ items }) => {
     <div id="galeria" style={{ padding: "20px"}}>
       <h2 className="mb-3">Galería</h2>
 
-      <div style={{ marginBottom: "20px", display: "flex", gap: "10px" }}>
+      <div style={{ marginBottom: "10px", display: "flex", gap: "8px" }}>
         <button
             type="button" class="btn btn-outline-secondary"
             onClick={() => setFilter("all")}
@@ -35,8 +35,8 @@ const Galeria = ({ items }) => {
       <div
         style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, 200px)",
-            gap: "20px",
+            gridTemplateColumns: "repeat(auto-fit, 250px)",
+            gap: "1px",
             justifyContent: "start",
         }}
         >
@@ -44,8 +44,8 @@ const Galeria = ({ items }) => {
             <div
             key={index}
             style={{
-                width: "200px",
-                height: "200px",
+                width: "250px",
+                height: "250px",
                 overflow: "hidden",
                 borderRadius: "5px",
                 display: "flex",
@@ -61,6 +61,8 @@ const Galeria = ({ items }) => {
                 style={{
                     maxWidth: "100%",
                     maxHeight: "100%",
+                    minWidth: "100%",
+                    minHeight: "100%",
                     objectFit: "cover",
                 }}
                 />

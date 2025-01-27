@@ -15,6 +15,8 @@ const ArticleDetails = () => {
   const { name } = location.state || {};
   const ejemploPersona = {
     imagen: "https://picsum.photos/200/200",
+    whatsapp: "523333333333",
+    telegram: "523333333333",
     costoPorHora: 50,
     nombre: "Juan Pérez",
     categorias: ["Programación", "Diseño", "Marketing", "Programación", "Diseño", "Marketing", "Programación", "Diseño", "Marketing", "Programación", "Diseño", "Marketing"],
@@ -35,9 +37,9 @@ const ArticleDetails = () => {
   };
 
   const items = [
-    { type: "photo", src: "https://picsum.photos/200", alt: "Foto de ejemplo 1" },
-    { type: "photo", src: "https://picsum.photos/200", alt: "Foto de ejemplo 2" },
-    { type: "photo", src: "https://picsum.photos/200", alt: "Foto de ejemplo 3" },
+    { type: "photo", src: "https://picsum.photos/2000", alt: "Foto de ejemplo 1" },
+    { type: "photo", src: "https://picsum.photos/250", alt: "Foto de ejemplo 2" },
+    { type: "photo", src: "https://picsum.photos/250", alt: "Foto de ejemplo 3" },
     { type: "video", src: "https://www.youtube.com/watch?v=EngW7tLk6R8&t=3s" },
     { type: "video", src: "https://videos.pexels.com/video-files/3195394/3195394-uhd_2560_1440_25fps.mp4" },
   ];
@@ -48,6 +50,14 @@ const ArticleDetails = () => {
 
   const toggleDescripcion = () => {
     setMostrarCompleto(!mostrarCompleto);
+  };
+
+  const handleWhatsAppClick = () => {
+    window.open(`https://wa.me/${ejemploPersona.whatsapp}`, '_blank');
+  };
+
+  const handleTelegramClick = () => {
+    window.open(`https://t.me/${ejemploPersona.telegram}`, '_blank');
   };
 
   return (
@@ -109,7 +119,10 @@ const ArticleDetails = () => {
                   : ejemploPersona.descripcion.slice(0, 150) + (ejemploPersona.descripcion.length > 150 ? "..." : "")}
                   {ejemploPersona.descripcion.length > 150 && (
                 <button
-                  className="btn btn-link p-0"
+                  className="btn btn-link p-0 ps-1 pb-1 m-0 border-0 text-decoration-none"
+                  style={{
+                    color: "#038093"
+                  }}
                   onClick={toggleDescripcion}
                 >
                   {mostrarCompleto ? "Mostrar menos" : "Mostrar más"}
@@ -125,8 +138,27 @@ const ArticleDetails = () => {
           </div>
         </div>
         
-        <div className="col-md-3 text-center">
-          <h3>${ejemploPersona.costoPorHora} / hora</h3>
+        <div className="col-md-3 text-end">
+          <div className="container p-0">
+            {ejemploPersona.whatsapp !== undefined && ejemploPersona.whatsapp !== null && ejemploPersona.whatsapp !== "" && (
+            <button 
+            className="ms-2 rounded-3 border-0 px-3 py-1 mb-2" 
+            onClick={handleWhatsAppClick}
+            style={{backgroundColor: "#c90035"}}>
+              <i className="bi bi-whatsapp fs-5"></i>
+            </button>
+            )}
+            {ejemploPersona.whatsapp !== undefined && ejemploPersona.whatsapp !== null && ejemploPersona.whatsapp !== "" && (
+            <button 
+            className="ms-2 rounded-3 border-0 px-3 py-1 mb-2" 
+            onClick={handleTelegramClick}
+            style={{backgroundColor: "#c90035"}}>
+              <i className="bi bi-telegram fs-5"></i>
+            </button>
+            )}
+          </div>
+          <h5>Tarifa por hora</h5>
+          <h3>${ejemploPersona.costoPorHora}</h3>
         </div>
       </div>
     </div>
