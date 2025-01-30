@@ -64,8 +64,8 @@ return (
         dialogClassName="custom-modal"
         centered
         size="lg"
-
         >
+            
         <Modal.Body className="d-flex align-items-center justify-content-center bg-dark flex-column">
             <video src={item.record} controls autoPlay style={{ maxWidth: "100%", maxHeight: "100%" }} />
         </Modal.Body>

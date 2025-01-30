@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-//import { useParams, useLocation } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useLocation } from "react-router-dom";
+//import { useLocation } from "react-router-dom";
 import Header from "../components/Header";
 import Galery from "../components/Galery";
 import Services from "../components/Services";
@@ -10,39 +10,20 @@ import Experiences from "../components/Experiences";
 import Footer from "../components/Footer";
 
 const ArticleDetails = () => {
-  //const { id } = useParams();
+  const { id } = useParams();
   const location = useLocation();
   const { name } = location.state || {};
-  const ejemploPersona = {
-    imagen: "https://picsum.photos/200/200",
-    whatsapp: "523333333333",
-    telegram: "523333333333",
-    costoPorHora: 50,
-    nombre: "Juan Pérez",
-    categorias: ["Programación", "Diseño", "Marketing", "Programación", "Diseño", "Marketing", "Programación", "Diseño", "Marketing", "Programación", "Diseño", "Marketing"],
-    servicios: [
-        { nombre: "React", nivel: "Avanzado" },
-        { nombre: "Node.js", nivel: "Intermedio" },
-        { nombre: "Photoshop" },
-        { nombre: "React", nivel: "Avanzado" },
-        { nombre: "Node.js", nivel: "Intermedio" },
-        { nombre: "Photoshop" },
-        { nombre: "React", nivel: "Avanzado" },
-        { nombre: "Node.js", nivel: "Intermedio" },
-        { nombre: "Photoshop" }, 
-    ],
-    descripcion:
-      "Soy un desarrollador con 5 años de experiencia en React y Node.js. Me apasiona trabajar en proyectos innovadores y aportar valor a los equipos con los que colaboro. También tengo experiencia en diseño gráfico y marketing digital.",
-    horarioDisponible: "Lunes a Viernes: 9:00 AM - 6:00 PM",
-  };
+  
 
-  const items = [
-    { type: "photo", src: "https://picsum.photos/2000", alt: "Foto de ejemplo 1" },
-    { type: "photo", src: "https://picsum.photos/250", alt: "Foto de ejemplo 2" },
-    { type: "photo", src: "https://picsum.photos/250", alt: "Foto de ejemplo 3" },
-    { type: "video", src: "https://www.youtube.com/watch?v=EngW7tLk6R8&t=3s" },
-    { type: "video", src: "https://videos.pexels.com/video-files/3195394/3195394-uhd_2560_1440_25fps.mp4" },
-  ];
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    fetch("https://lobasvip.com.ve/index.php/api/people/"+id)
+      .then((response) => response.json())
+      .then((data) => setData(data))
+      .catch((error) => console.error("Error al obtener los datos:", error));
+  }, []);
+
 
   const globalLocation = { lat: 19.432608, lng: -99.133209 };
 
@@ -53,12 +34,54 @@ const ArticleDetails = () => {
   };
 
   const handleWhatsAppClick = () => {
-    window.open(`https://wa.me/${ejemploPersona.whatsapp}`, '_blank');
+    window.open(`https://wa.me/${data?.whatsapp}`, '_blank');
   };
 
   const handleTelegramClick = () => {
-    window.open(`https://t.me/${ejemploPersona.telegram}`, '_blank');
+    window.open(`https://t.me/${data?.telegram}`, '_blank');
   };
+
+  const services = [];
+  const subServices = [];
+
+  if(data){
+    for (let prop of data.tags){
+      
+      if (prop.tipo == "Servicios")
+        services.push(prop.valor)
+      else if(prop.tipo == "Servicios Virtuales"){
+        let obj = subServices.find(item => item.name === "Servicios Virtuales");
+        
+
+        if (obj) {
+            obj.list.push(prop.valor);
+        } else {
+            subServices.push({ name: "Servicios Virtuales", list: [prop.valor] });
+        }
+      }
+      else if(prop.tipo == "Tipo de Fantasias"){
+        
+        let obj = subServices.find(item => item.name === "Tipo de Fantasias");
+
+        if (obj) {
+            obj.list.push(prop.valor);
+        } else {
+            subServices.push({ name: "Tipo de Fantasias", list: [prop.valor] });
+        }
+      }
+      else if(prop.tipo == "Métodos de Pago"){
+        let obj = subServices.find(item => item.name === "Métodos de Pago");
+
+        if (obj) {
+            obj.list.push(prop.valor);
+        } else {
+            subServices.push({ name: "Métodos de Pago", list: [prop.valor] });
+        }
+      }
+      
+    }
+    
+  }
 
   return (
     <div>
@@ -67,16 +90,30 @@ const ArticleDetails = () => {
         <div className="container mt-5">
       <div className="row">
         <div className="col-md-3 text-center">
-          <img
-            src={ejemploPersona.imagen}
-            alt="Imagen de la persona"
-            className="img-fluid rounded-circle"
-          />
+          <div 
+            style={{width: 250,
+              height: 250
+            }}
+          >
+            <img
+              src={"https://lobasvip.com.ve/storage/" + data?.media[0].file_path}
+              alt="Imagen de la persona"
+              className="rounded-circle"
+              style={{
+                maxWidth: "100%",
+                maxHeight: "100%",
+                minWidth: "100%",
+                minHeight: "100%",
+                objectFit: "cover",
+            }}
+            />
+          </div>
+          
         </div>
         <div className="col-md-6">
-          <h4>{name}</h4>
+          <h4>{data?.nombre}</h4>
           <div className="">
-            {ejemploPersona.categorias.map((categoria, index) => (
+            {/* {ejemploPersona.categorias.map((categoria, index) => (
               <span
                 key={index}
                 className="badge text-light me-1"
@@ -88,10 +125,10 @@ const ArticleDetails = () => {
               >
                 {categoria}
               </span>
-            ))}
+            ))} */}
           </div>
           <div>
-            {ejemploPersona.servicios.map((servicio, index) => (
+            {data?.tags.map((tag, index) => (
               <span
                 key={index}
                 className="badge text-dark me-1"
@@ -102,9 +139,9 @@ const ArticleDetails = () => {
                   display: "inline-block",
                 }}
               >
-                {servicio.nombre}{" "}
-                {servicio.nivel && (
-                  <strong>({servicio.nivel})</strong>
+                {tag.tipo}{" "}
+                {tag.valor && (
+                  <strong>{tag.valor}</strong>
                 )}
               </span>
             ))}
@@ -115,9 +152,9 @@ const ArticleDetails = () => {
               <h5>Descripción</h5>
               <p>
                 {mostrarCompleto
-                  ? ejemploPersona.descripcion
-                  : ejemploPersona.descripcion.slice(0, 150) + (ejemploPersona.descripcion.length > 150 ? "..." : "")}
-                  {ejemploPersona.descripcion.length > 150 && (
+                  ? data?.about
+                  : data?.about.slice(0, 150) + (data?.about.length > 150 ? "..." : "")}
+                  {data?.about.length > 150 && (
                 <button
                   className="btn btn-link p-0 ps-1 pb-1 m-0 border-0 text-decoration-none"
                   style={{
@@ -133,14 +170,14 @@ const ArticleDetails = () => {
             </div>
             <div className="col-md-4">
               <h5>Horario Disponible</h5>
-              <p>{ejemploPersona.horarioDisponible}</p>
+              <p>{data?.horario}</p>
             </div>
           </div>
         </div>
         
         <div className="col-md-3 text-end">
           <div className="container p-0">
-            {ejemploPersona.whatsapp !== undefined && ejemploPersona.whatsapp !== null && ejemploPersona.whatsapp !== "" && (
+            {data?.whatsapp !== undefined && data?.whatsapp !== null && data?.whatsapp !== "" && (
             <button 
             className="ms-2 rounded-3 border-0 px-3 py-1 mb-2" 
             onClick={handleWhatsAppClick}
@@ -148,7 +185,7 @@ const ArticleDetails = () => {
               <i className="bi bi-whatsapp fs-5"></i>
             </button>
             )}
-            {ejemploPersona.whatsapp !== undefined && ejemploPersona.whatsapp !== null && ejemploPersona.whatsapp !== "" && (
+            {data?.telegram !== undefined && data?.telegram !== null && data?.telegram !== "" && (
             <button 
             className="ms-2 rounded-3 border-0 px-3 py-1 mb-2" 
             onClick={handleTelegramClick}
@@ -158,7 +195,7 @@ const ArticleDetails = () => {
             )}
           </div>
           <h5>Tarifa por hora</h5>
-          <h3>${ejemploPersona.costoPorHora}</h3>
+          <h3>${data?.tarifa}</h3>
         </div>
       </div>
     </div>
@@ -186,14 +223,10 @@ const ArticleDetails = () => {
         </div>
       </nav>
 
-        <Galery items={items}/>
-        <Services services={["element 1", "element 2", "element 3", "element 4", "element 5"]}
-            subServices={[
-            { name: "SubServicio 1", list: ["element 1", "element 2", "element 3", "element 4", "element 5", "element 5", "element 5", "element 5", "element 5", "element 5", "element 5", "element 5", "element 5", "element 5", "element 5", "element 5" ]},
-            { name: "SubServicio 2", list: ["element 1", "element 2", "element 3", "element 4", "element 5" ]},
-            { name: "SubServicio 3", list: ["element 1", "element 2", "element 3", "element 4", "element 5" ]},
-            { name: "Adicionales", list: ["element 1", "element 2", "element 3", "element 4", "element 5" ]},
-        ]} />
+
+        <Galery items={data?.media}/>
+        <Services services={services}
+            subServices={subServices} />
         <Map location={globalLocation}/>
         <Comments />
         <Experiences />
