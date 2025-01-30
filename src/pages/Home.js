@@ -1,51 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Filters from "../components/Filters";
 import ArticleList from "../components/ArticleList";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 const Home = () => {
+
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+      fetch("https://lobasvip.com.ve/index.php/api/people")
+        .then((response) => response.json())
+        .then((json) => setData(json))
+        .catch((error) => console.error("Error:", error));
+    }, []);
+
+    const articles = data;
+    
     const articlesData = [
         {
             id: 1,
-            name: "Artículo A1",
+            nombre: "Artículo A1",
             description: "Descripción breve A1",
             image: "https://picsum.photos/200/300",
-            zone: "Zona 1",
-            categories: ["Categoria 1", "Categoria 2"],
+            mapa: "Zona 1",
+            tags: ["Categoria 1", "Categoria 2"],
         },
-        {            
-            id: 2,
-            name: "Artículo A2",
-            description: "Descripción breve A2",
-            image: "https://picsum.photos/200/300",
-            zone: "Zona 2",
-            categories: ["Categoria 2", "Categoria 3"],
-        },
-        {            
-            id: 2,
-            name: "Artículo A2",
-            description: "Descripción breve A2",
-            image: "https://picsum.photos/200/300",
-            zone: "Zona 2",
-            categories: ["Categoria 2", "Categoria 3"],
-        },
-        {            
-            id: 2,
-            name: "Artículo A2",
-            description: "Descripción breve A2",
-            image: "https://picsum.photos/200/300",
-            zone: "Zona 2",
-            categories: ["Categoria 2", "Categoria 3"],
-        },
-        {            
-            id: 2,
-            name: "Artículo A2",
-            description: "Descripción breve A2",
-            image: "https://picsum.photos/200/300",
-            zone: "Zona 2",
-            categories: ["Categoria 2", "Categoria 3"],
-        }
     ];
 
     const [filters, setFilters] = useState({
@@ -54,9 +34,9 @@ const Home = () => {
         categories: [],
     });
 
-    const filteredArticles = articlesData.filter((article) => {
+    const filteredArticles = articles.filter((article) => {
         const matchesName =
-            article.name.toLowerCase().includes(filters.name.toLowerCase());
+            article.nombre.toLowerCase().includes(filters.name.toLowerCase());
 
         const matchesZone = filters.zone
             ? article.zone === filters.zone
@@ -73,15 +53,16 @@ const Home = () => {
 
     return (
         <div>
+            {articles.map((item)=>(
+                <div>{}</div>
+            ))}
             <Header></Header>
             <div className="container ps-5">
                 <h3>Articulos Mexico</h3>
                 
             </div>
             <Filters setFilters={setFilters} />
-            <ArticleList quality="Alta Calidad" articles={filteredArticles} />
-            <ArticleList quality="Media Calidad" articles={filteredArticles} />
-            <ArticleList quality="Baja Calidad" articles={filteredArticles} />
+            <ArticleList quality="Disponibles" articles={filteredArticles} />
             <Footer></Footer>    
         </div>
     );
