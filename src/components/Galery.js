@@ -3,7 +3,7 @@ import React, { useState } from "react";
 const Galeria = ({ items }) => {
   const [filter, setFilter] = useState("all");
 
-  const filteredItems = items.filter((item) =>
+  const filteredItems = items?.filter((item) =>
     filter === "all" ? true : item.type === filter
   );
 
@@ -40,7 +40,7 @@ const Galeria = ({ items }) => {
             justifyContent: "start",
         }}
         >
-        {filteredItems.map((item, index) => (
+        {filteredItems?.map((item, index) => (
             <div
             key={index}
             style={{
@@ -54,9 +54,9 @@ const Galeria = ({ items }) => {
                 backgroundColor: "#f0f0f0",
             }}
             >
-            {item.type === "photo" ? (
+            {item.type === "image" ? (
                 <img
-                src={item.src}
+                src={"https://lobasvip.com.ve/storage/"+item.file_path}
                 alt={item.alt || "Foto"}
                 style={{
                     maxWidth: "100%",

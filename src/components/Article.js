@@ -6,7 +6,7 @@ const Article = ({ id, name, description, image }) => {
     const navigate = useNavigate();
 
     const handleArticleClick = (id, name) => {
-    navigate(`/article/${id}`, { state: { name } });
+    navigate(`/article/${id}`, { state: { name, id } });
   };
     return (
         <div style={styles.article}>

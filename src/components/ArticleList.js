@@ -11,9 +11,10 @@ const ArticleList = ({ quality, articles }) => {
                         <div className="mb-4 d-inline-flex" key={index}>
                             <Article
                                 id={article.id}
-                                name={article.name}
-                                description={article.description}
-                                image={article.image}
+                                name={article.nombre}
+                                description={article.mapa}
+                                
+                                image={"https://lobasvip.com.ve/storage/" + article?.media[0]?.file_path}
                             />
                         </div>
                     ))}
