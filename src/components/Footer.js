@@ -8,9 +8,8 @@ const Footer = () => {
         <div className="row">
           <div className="col-md-4 mb-3">
             <h5>Contacto</h5>
-            <p>Email: contacto@tuapp.com</p>
-            <p>Teléfono: +52 123 456 7890</p>
-            <p>Dirección: Calle Falsa 123, Ciudad de México</p>
+            <p>Email: hello@lobasvip.com.ve</p>
+            <p>Telegran : t.me/El_Lobo_2109</p>
           </div>
 
           <div className="col-md-4 mb-3">
@@ -27,15 +26,15 @@ const Footer = () => {
           <div className="col-md-4 mb-3">
             <h5>Síguenos</h5>
             <a
-              href="https://www.facebook.com"
+              href="https://www.tiktok.com/@lobas.vip?_t=ZM-8tJQYRXlH8P&_r=1"
               target="_blank"
               rel="noopener noreferrer"
               className="text-light me-3"
             >
-              <i className="bi bi-facebook" style={{ fontSize: "1.5rem" }}></i>
+              <i className="bi bi-tiktok" style={{ fontSize: "1.5rem" }}></i>
             </a>
             <a
-              href="https://www.twitter.com"
+              href="https://x.com/LobasVip?t=gDeAKbkne6kd_GoHxU2e2g&s=09"
               target="_blank"
               rel="noopener noreferrer"
               className="text-light me-3"
@@ -43,7 +42,7 @@ const Footer = () => {
               <i className="bi bi-twitter" style={{ fontSize: "1.5rem" }}></i>
             </a>
             <a
-              href="https://www.instagram.com"
+              href="https://www.instagram.com/lobas_vip?igsh=Y2tycTB5ZnBoNmZk"
               target="_blank"
               rel="noopener noreferrer"
               className="text-light"
@@ -54,7 +53,7 @@ const Footer = () => {
         </div>
 
         <div className="text-center mt-4">
-          <p className="mb-0">&copy; 2025 TuApp. Todos los derechos reservados.</p>
+          <p className="mb-0">&copy; 2025 Lobas.vip. Todos los derechos reservados.</p>
         </div>
       </div>
     </footer>
