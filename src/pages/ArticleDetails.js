@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useLocation } from "react-router-dom";
-//import { useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams} from "react-router-dom";
 import Header from "../components/Header";
 import Galery from "../components/Galery";
 import Services from "../components/Services";
@@ -11,8 +10,6 @@ import Footer from "../components/Footer";
 
 const ArticleDetails = () => {
   const { id } = useParams();
-  const location = useLocation();
-  const { name } = location.state || {};
   
 
   const [data, setData] = useState(null);
@@ -91,8 +88,11 @@ const ArticleDetails = () => {
       <div className="row">
         <div className="col-md-3 text-center">
           <div 
-            style={{width: 250,
-              height: 250
+            style={{maxWidth: 250,
+              maxHeight: 250,
+              margin: "auto",
+              position: "relative",
+              overflow: "hidden",
             }}
           >
             <img
@@ -100,10 +100,8 @@ const ArticleDetails = () => {
               alt="Imagen de la persona"
               className="rounded-circle"
               style={{
-                maxWidth: "100%",
-                maxHeight: "100%",
-                minWidth: "100%",
-                minHeight: "100%",
+                width: "100%",
+                aspectRatio: "1/1",
                 objectFit: "cover",
             }}
             />
@@ -127,16 +125,19 @@ const ArticleDetails = () => {
               </span>
             ))} */}
           </div>
-          <div>
+          <div >
             {data?.tags.map((tag, index) => (
               <span
                 key={index}
-                className="badge text-dark me-1"
+                className="badge me-1"
                 style={{
+                  color: "#656565",
+                  fontSize: "13px",
                   backgroundColor: "#eff0f5",
                   padding: "5px 5px",
                   borderRadius: "5px",
                   display: "inline-block",
+                  margin: "1px"
                 }}
               >
                 {tag.tipo}{" "}

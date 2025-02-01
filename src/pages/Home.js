@@ -16,17 +16,26 @@ const Home = () => {
     }, []);
 
     const articles = data;
-    
-    const articlesData = [
-        {
-            id: 1,
-            nombre: "Artículo A1",
-            description: "Descripción breve A1",
-            image: "https://picsum.photos/200/300",
-            mapa: "Zona 1",
-            tags: ["Categoria 1", "Categoria 2"],
-        },
-    ];
+
+    function getTags (){
+        if (articles){
+            const tagsValues = []
+            for (let article of articles){
+                for (let tag of article.tags){
+                    let tagName = tag.tipo.toLowerCase();
+                    if(tagName.includes("servicios") || tagName.includes("fantasia"))
+                        tagsValues.push(tag.valor);
+                }
+            }
+            return tagsValues;
+        }
+    }
+
+    function getZones (){
+        if (articles){
+            return articles.map(article => article.mapa);
+        }
+    }
 
     const [filters, setFilters] = useState({
         name: "",
@@ -35,18 +44,31 @@ const Home = () => {
     });
 
     const filteredArticles = articles.filter((article) => {
+
         const matchesName =
             article.nombre.toLowerCase().includes(filters.name.toLowerCase());
+            
 
         const matchesZone = filters.zone
-            ? article.zone === filters.zone
+            ? article.mapa === filters.zone
             : true;
 
-        const matchesCategories =
-            filters.categories.length === 0 ||
-            filters.categories.some((category) =>
-                article.categories.includes(category)
-            );
+            
+        let matchesCategories = false;
+
+        for (let articleTag of article.tags){
+            if (filters.categories.length === 0 ||
+                filters.categories.some((category) =>
+                    articleTag.valor.includes(category)
+                ))
+            {
+                    matchesCategories = true; 
+                    break;}
+        }
+            
+
+        
+            
 
         return matchesName && matchesZone && matchesCategories;
     });
@@ -61,7 +83,7 @@ const Home = () => {
                 <h3>Articulos Mexico</h3>
                 
             </div>
-            <Filters setFilters={setFilters} />
+            <Filters setFilters={setFilters} zones = {articles? getZones() : ["Zona 1", "Zona 2", "Zona 3"]} categories = {articles ? getTags() : ["Categoria 1", "Categoria 2"]}/>
             <ArticleList quality="Disponibles" articles={filteredArticles} />
             <Footer></Footer>    
         </div>
