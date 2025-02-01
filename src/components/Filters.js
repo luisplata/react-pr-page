@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 
-const Filters = ({ setFilters }) => {
+const Filters = ({ setFilters, zones, categories = ["Categoria 1", "Categoria 2", "Categoria 3"] }) => {
     const [searchName, setSearchName] = useState("");
     const [selectedZone, setSelectedZone] = useState("");
     const [selectedCategories, setSelectedCategories] = useState([]);
@@ -11,9 +11,7 @@ const Filters = ({ setFilters }) => {
         category: useRef(null),
     };
 
- 
-    const zones = ["Zona 1", "Zona 2", "Zona 3"];
-    const categories = ["Categoria 1", "Categoria 2", "Categoria 3"];
+
 
     const handleSearchChange = (e) => {
         setSearchName(e.target.value);
