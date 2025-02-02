@@ -98,7 +98,7 @@ const Header = () => {
                             </div>    
                             </i></a>
                         </li>
-                        <li className="nav-item">
+                        {/* <li className="nav-item">
                             <a className="nav-link fs-5 ms-3 text-dark" onClick={() => setShowOptionsMenu(!showOptionsMenu)}><i className="bi bi-three-dots-vertical me-2">
                             <div style={{ position: "relative", display: "inline-block"}}>
                                 {showOptionsMenu && (
@@ -117,7 +117,7 @@ const Header = () => {
                                 )}
                             </div>
                                 </i></a>
-                        </li>
+                        </li> */}
                     </ul>
                 </div>
             </div>
