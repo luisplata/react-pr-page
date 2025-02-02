@@ -65,7 +65,7 @@ const Header = () => {
                         <li className="nav-item">
                             <a className="nav-link fs-5 ms-3 text-dark" href="#calidad-3"><i className="bi bi-cloud-upload-fill me-2"></i>Publicar</a>
                         </li> */}
-                        <li className="nav-item">
+                        {/* <li className="nav-item">
                             <a className="nav-link fs-5 ms-3 text-dark" onClick={() => setShowFavorites(!showFavorites)}><i className="bi bi-star-fill me-2">
                             <div style={{ position: "relative", display: "inline-block"}}>
 
@@ -97,7 +97,7 @@ const Header = () => {
                                 )}
                             </div>    
                             </i></a>
-                        </li>
+                        </li> */}
                         {/* <li className="nav-item">
                             <a className="nav-link fs-5 ms-3 text-dark" onClick={() => setShowOptionsMenu(!showOptionsMenu)}><i className="bi bi-three-dots-vertical me-2">
                             <div style={{ position: "relative", display: "inline-block"}}>
