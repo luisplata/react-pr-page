@@ -127,24 +127,12 @@ const ArticleDetails = () => {
           </div>
           <div >
             {data?.tags.map((tag, index) => (
-              <span
-                key={index}
-                className="badge me-1"
-                style={{
-                  color: "#656565",
-                  fontSize: "13px",
-                  backgroundColor: "#eff0f5",
-                  padding: "5px 5px",
-                  borderRadius: "5px",
-                  display: "inline-block",
-                  margin: "1px"
-                }}
-              >
-                {tag.tipo}{" "}
+              <div className="d-inline-flex px-2 me-1 rounded-3" style={{backgroundColor: "#eff0f5", marginBottom: "2px"}}>
+                {tag.tipo}&nbsp;
                 {tag.valor && (
                   <strong>{tag.valor}</strong>
                 )}
-              </span>
+              </div>
             ))}
           </div>
 
