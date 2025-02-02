@@ -78,7 +78,7 @@ const Galeria = ({ items }) => {
                     objectFit: "cover",
                 }}
                 >
-                <source src={item.src} type="video/mp4" />
+                <source src={MEDIA_BASE_URL+item.file_path} type="video/mp4" />
                 Tu navegador no soporta videos.
                 </video>
             )}
