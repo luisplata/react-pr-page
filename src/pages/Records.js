@@ -46,6 +46,8 @@ return (
                 gridTemplateColumns: "repeat(auto-fit, 250px)",
                 gap: "1px",
                 justifyContent: "start",
+                marginTop:"20px",
+                marginBottom: "50px",
             }}>
                 {records.map((item)=>(
                     <div>

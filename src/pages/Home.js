@@ -23,7 +23,7 @@ const Home = () => {
             for (let article of articles){
                 for (let tag of article.tags){
                     let tagName = tag.tipo.toLowerCase();
-                    if(tagName.includes("servicios") || tagName.includes("fantasia"))
+                    if((tagName.includes("servicios") || tagName.includes("fantasia")) && !tagsValues.includes(tag.valor))
                         tagsValues.push(tag.valor);
                 }
             }
@@ -33,7 +33,12 @@ const Home = () => {
 
     function getZones (){
         if (articles){
-            return articles.map(article => article.mapa);
+            const zones = [];
+            for (let article of articles){
+                if (!zones.includes(article.mapa))
+                    zones.push(article.mapa)
+            }
+            return zones;
         }
     }
 
