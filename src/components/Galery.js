@@ -11,21 +11,23 @@ const Galeria = ({ items }) => {
     <div id="galeria" style={{ padding: "20px"}}>
       <h2 className="mb-3">Galería</h2>
 
-      <div style={{ marginBottom: "10px", display: "flex", gap: "8px" }}>
+      <div className="d-flex flex-wrap gap-2 justify-content-start" style={{ marginBottom: "10px", gap: "8px" }}>
         <button
-            type="button" class="btn btn-outline-secondary"
+            type="button" class="btn" style={{background: "rgba(3, 128, 147, 0.4)", color: "rgb(3, 128, 147)"}}
             onClick={() => setFilter("all")}
         >
             Todos
         </button>
         <button
-            type="button" class="btn btn-outline-secondary"
-            onClick={() => setFilter("photo")}
+            type="button" class="btn" style={{background: "rgba(3, 128, 147, 0.4)", color: "rgb(3, 128, 147)"}}
+            
+            onClick={() => setFilter("image")}
         >
             Fotos
         </button>
         <button
-            type="button" class="btn btn-outline-secondary"
+            type="button" class="btn" style={{background: "rgba(3, 128, 147, 0.4)", color: "rgb(3, 128, 147)"}}
+            
             onClick={() => setFilter("video")}
         >
             Videos
@@ -56,7 +58,7 @@ const Galeria = ({ items }) => {
             >
             {item.type === "image" ? (
                 <img
-                src={"https://lobasvip.com.ve/storage/"+item.file_path}
+                src={"https://lobasvip.com.ve/"+item.file_path}
                 alt={item.alt || "Foto"}
                 style={{
                     maxWidth: "100%",
