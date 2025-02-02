@@ -3,13 +3,15 @@ import Filters from "../components/Filters";
 import ArticleList from "../components/ArticleList";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const Home = () => {
 
     const [data, setData] = useState([]);
 
     useEffect(() => {
-      fetch("https://lobasvip.com.ve/index.php/api/people")
+        
+      fetch(`${API_BASE_URL}people`)
         .then((response) => response.json())
         .then((json) => setData(json))
         .catch((error) => console.error("Error:", error));
@@ -85,7 +87,7 @@ const Home = () => {
             ))}
             <Header></Header>
             <div className="container ps-5">
-                <h3>Articulos Mexico</h3>
+                <h3>Modelos</h3>
                 
             </div>
             <Filters setFilters={setFilters} zones = {articles? getZones() : ["Zona 1", "Zona 2", "Zona 3"]} categories = {articles ? getTags() : ["Categoria 1", "Categoria 2"]}/>
