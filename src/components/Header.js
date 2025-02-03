@@ -53,12 +53,12 @@ const Header = () => {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav ms-auto">
-                        <li className="nav-item">
+                        {/* <li className="nav-item">
                             <a className="nav-link fs-5 ms-3 text-dark" onClick={() => handleArticleClick("feed")}><i className="bi bi-house-fill me-2"></i>Novedades</a>
                         </li> 
                         <li className="nav-item">
                             <a className="nav-link fs-5 ms-3 text-dark" onClick={() => handleArticleClick("records")}><i className="bi bi-youtube me-2"></i>Videos</a>
-                        </li>
+                        </li> */}
                         {/* <li className="nav-item">
                             <a className="nav-link fs-5 ms-3 text-dark" href="#calidad-3"><i className="bi bi-camera-video-fill me-2"></i>Videollamadas</a>
                         </li>

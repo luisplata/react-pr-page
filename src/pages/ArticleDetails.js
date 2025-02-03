@@ -8,6 +8,9 @@ import Comments from "../components/Comments";
 import Experiences from "../components/Experiences";
 import Footer from "../components/Footer";
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const MEDIA_BASE_URL = process.env.REACT_APP_MEDIA_BASE_URL;
+
 const ArticleDetails = () => {
   const { id } = useParams();
   
@@ -15,7 +18,7 @@ const ArticleDetails = () => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    fetch("https://lobasvip.com.ve/index.php/api/people/"+id)
+    fetch(`${API_BASE_URL}people/${id}`)
       .then((response) => response.json())
       .then((data) => setData(data))
       .catch((error) => console.error("Error al obtener los datos:", error));
@@ -44,38 +47,19 @@ const ArticleDetails = () => {
   if(data){
     for (let prop of data.tags){
       
-      if (prop.tipo == "Servicios")
-        services.push(prop.valor)
-      else if(prop.tipo == "Servicios Virtuales"){
-        let obj = subServices.find(item => item.name === "Servicios Virtuales");
-        
-
-        if (obj) {
-            obj.list.push(prop.valor);
-        } else {
-            subServices.push({ name: "Servicios Virtuales", list: [prop.valor] });
-        }
-      }
-      else if(prop.tipo == "Tipo de Fantasias"){
-        
-        let obj = subServices.find(item => item.name === "Tipo de Fantasias");
-
-        if (obj) {
-            obj.list.push(prop.valor);
-        } else {
-            subServices.push({ name: "Tipo de Fantasias", list: [prop.valor] });
-        }
-      }
-      else if(prop.tipo == "Métodos de Pago"){
-        let obj = subServices.find(item => item.name === "Métodos de Pago");
-
-        if (obj) {
-            obj.list.push(prop.valor);
-        } else {
-            subServices.push({ name: "Métodos de Pago", list: [prop.valor] });
-        }
-      }
+      const propTipo = prop.tipo.toLowerCase();
       
+      if (prop.tipo === "Servicios" )
+        services.push(prop.valor)
+      else if(propTipo.includes("virtuales") || propTipo.includes("adicionales") || propTipo.includes("fantasias") || propTipo.includes("métodos de pago")){
+        let obj = subServices.find(item => item.name === prop.tipo);
+        
+        if (obj) {
+            obj.list.push(prop.valor);
+        } else {
+            subServices.push({ name: prop.tipo, list: [prop.valor] });
+        }
+      }
     }
     
   }
@@ -96,7 +80,7 @@ const ArticleDetails = () => {
             }}
           >
             <img
-              src={"https://lobasvip.com.ve/" + data?.media[0].file_path}
+              src={MEDIA_BASE_URL + data?.media[0].file_path}
               alt="Imagen de la persona"
               className="rounded-circle"
               style={{

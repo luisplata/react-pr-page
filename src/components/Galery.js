@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+const MEDIA_BASE_URL = process.env.REACT_APP_MEDIA_BASE_URL;
 
 const Galeria = ({ items }) => {
   const [filter, setFilter] = useState("all");
@@ -58,7 +59,7 @@ const Galeria = ({ items }) => {
             >
             {item.type === "image" ? (
                 <img
-                src={"https://lobasvip.com.ve/"+item.file_path}
+                src={MEDIA_BASE_URL+item.file_path}
                 alt={item.alt || "Foto"}
                 style={{
                     maxWidth: "100%",
@@ -77,7 +78,7 @@ const Galeria = ({ items }) => {
                     objectFit: "cover",
                 }}
                 >
-                <source src={item.src} type="video/mp4" />
+                <source src={MEDIA_BASE_URL+item.file_path} type="video/mp4" />
                 Tu navegador no soporta videos.
                 </video>
             )}
