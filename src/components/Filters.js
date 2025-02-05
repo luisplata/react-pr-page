@@ -71,8 +71,8 @@ const Filters = ({ setFilters, zones, categories = ["Categoria 1", "Categoria 2"
                     className="btn me-2"
                     type="button"
                     style={{ width: "auto" ,
-                        backgroundColor: "rgba(3, 128, 147, 0.4)",
-                        color: "rgb(3, 128, 147)"
+                        backgroundColor: "var(--special-background-color)",
+                        color: "var(--special-color)"
                     }}
                     onClick={() => handleFilterToggle("name")}
                 >
@@ -84,8 +84,8 @@ const Filters = ({ setFilters, zones, categories = ["Categoria 1", "Categoria 2"
                     className="btn me-2"
                     type="button"
                     style={{ width: "auto" ,
-                        backgroundColor: "rgba(3, 128, 147, 0.4)",
-                        color: "rgb(3, 128, 147)"
+                        backgroundColor: "var(--special-background-color)",
+                        color: "var(--special-color)"
                      }}
                     onClick={() => handleFilterToggle("zone")}
                 >
@@ -97,8 +97,8 @@ const Filters = ({ setFilters, zones, categories = ["Categoria 1", "Categoria 2"
                     className="btn me-2"
                     type="button"
                     style={{ width: "auto" ,
-                        backgroundColor: "rgba(3, 128, 147, 0.4)",
-                        color: "rgb(3, 128, 147)"
+                        backgroundColor: "var(--special-background-color)",
+                        color: "var(--special-color)"
                      }}
                     onClick={() => handleFilterToggle("category")}
                 >
@@ -108,7 +108,7 @@ const Filters = ({ setFilters, zones, categories = ["Categoria 1", "Categoria 2"
 
             {activeFilter === "name" && (
                 <div
-                    className="position-absolute mt-2 p-1 bg-light border-0 rounded shadow"
+                    className="position-absolute mt-2 p-1 model-tag border-0 rounded shadow"
                     style={{
                         zIndex: 1050,
                         top: `${getFilterPosition("name").top}px`,
@@ -118,7 +118,9 @@ const Filters = ({ setFilters, zones, categories = ["Categoria 1", "Categoria 2"
                 >
                     <input
                         type="text"
-                        className="form-control t-0 bg-light rounded-4"
+                        className="t-0 model-tag rounded-4 p-1 m-2"
+                        style={{borderColor: "var(--tag-color)",
+                        }}
                         value={searchName}
                         onChange={handleSearchChange}
                     />
@@ -128,7 +130,7 @@ const Filters = ({ setFilters, zones, categories = ["Categoria 1", "Categoria 2"
 
             {activeFilter === "zone" && (
                 <div
-                    className="position-absolute mt-2 p-3 bg-light rounded shadow"
+                    className="position-absolute mt-2 p-3 model-tag rounded shadow"
                     style={{
                         zIndex: 1050,
                         top: `${getFilterPosition("zone").top}px`,
@@ -136,7 +138,8 @@ const Filters = ({ setFilters, zones, categories = ["Categoria 1", "Categoria 2"
                     }}
                 >
                     <select
-                        className="form-select bg-light"
+                        className="form-select model-tag"
+                        style={{borderColor: "var(--tag-color)"}}
                         value={selectedZone}
                         onChange={handleZoneChange}
                     >
@@ -152,7 +155,7 @@ const Filters = ({ setFilters, zones, categories = ["Categoria 1", "Categoria 2"
 
             {activeFilter === "category" && (
                 <div
-                    className="position-absolute mt-2 p-3 bg-light rounded shadow"
+                    className="position-absolute mt-2 p-3 model-tag rounded shadow"
                     style={{
                         zIndex: 1050,
                         top: `${getFilterPosition("category").top}px`,
@@ -162,7 +165,8 @@ const Filters = ({ setFilters, zones, categories = ["Categoria 1", "Categoria 2"
                     {categories.map((category, index) => (
                         <div key={index} className="form-check">
                             <input
-                                className="form-check-input"
+                                className="form-check-input model-tag"
+                                style={{borderColor: "var(--tag-color)"}}
                                 type="checkbox"
                                 value={category}
                                 onChange={handleCategoryChange}

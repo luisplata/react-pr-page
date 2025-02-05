@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 const Footer = () => {
   return (
-    <footer className="bg-dark text-light py-4">
+    <footer className="py-4 model-tag">
       <div className="container">
         <div className="row">
           <div className="col-md-4 mb-3">
@@ -15,11 +15,11 @@ const Footer = () => {
           <div className="col-md-4 mb-3">
             <h5>Enlaces</h5>
             <ul className="list-unstyled">
-              <li><a href="#galeria" className="text-light text-decoration-none">Galería</a></li>
-              <li><a href="#servicios" className="text-light text-decoration-none">Servicios</a></li>
-              <li><a href="#mapa" className="text-light text-decoration-none">Mapa</a></li>
-              <li><a href="#comentarios" className="text-light text-decoration-none">Comentarios</a></li>
-              <li><a href="#experiencia" className="text-light text-decoration-none">Experiencia</a></li>
+              <li><a href="#galeria" className="model-tag text-decoration-none">Galería</a></li>
+              <li><a href="#servicios" className="model-tag text-decoration-none">Servicios</a></li>
+              <li><a href="#mapa" className="model-tag text-decoration-none">Mapa</a></li>
+              <li><a href="#comentarios" className="model-tag text-decoration-none">Comentarios</a></li>
+              <li><a href="#experiencia" className="model-tag text-decoration-none">Experiencia</a></li>
             </ul>
           </div>
 
@@ -31,7 +31,7 @@ const Footer = () => {
               rel="noopener noreferrer"
               className="text-light me-3"
             >
-              <i className="bi bi-tiktok" style={{ fontSize: "1.5rem" }}></i>
+              <i className="model-tag bi bi-tiktok" style={{ fontSize: "1.5rem" }}></i>
             </a>
             <a
               href="https://x.com/LobasVip?t=gDeAKbkne6kd_GoHxU2e2g&s=09"
@@ -39,7 +39,7 @@ const Footer = () => {
               rel="noopener noreferrer"
               className="text-light me-3"
             >
-              <i className="bi bi-twitter" style={{ fontSize: "1.5rem" }}></i>
+              <i className="model-tag bi bi-twitter" style={{ fontSize: "1.5rem" }}></i>
             </a>
             <a
               href="https://www.instagram.com/lobas_vip?igsh=Y2tycTB5ZnBoNmZk"
@@ -47,7 +47,7 @@ const Footer = () => {
               rel="noopener noreferrer"
               className="text-light"
             >
-              <i className="bi bi-instagram" style={{ fontSize: "1.5rem" }}></i>
+              <i className="model-tag bi bi-instagram" style={{ fontSize: "1.5rem" }}></i>
             </a>
           </div>
         </div>

@@ -34,11 +34,13 @@ const ArticleDetails = () => {
   };
 
   const handleWhatsAppClick = () => {
-    window.open(`https://wa.me/${data?.whatsapp}`, '_blank');
+    window.open(`https://wa.me/${data?.whatsapp}?text=${"Hola " + data?.nombre + "! Vi tu aviso https://lobasvip.com.ve ¿Como estas? Te quería consultar informacion sobre..."}`, '_blank');
   };
 
   const handleTelegramClick = () => {
-    window.open(`https://t.me/${data?.telegram}`, '_blank');
+    console.log(`https://t.me/${data?.telegram}`);
+    
+    window.open(`https://t.me/${data?.telegram.replaceAll("@","")}`, '_blank');
   };
 
   const services = [];
@@ -94,7 +96,7 @@ const ArticleDetails = () => {
         </div>
         <div className="col-md-6">
           <h4>{data?.nombre}</h4>
-          <div className="">
+          <div >
             {/* {ejemploPersona.categorias.map((categoria, index) => (
               <span
                 key={index}
@@ -111,7 +113,7 @@ const ArticleDetails = () => {
           </div>
           <div >
             {data?.tags.map((tag, index) => (
-              <div className="d-inline-flex px-2 me-1 rounded-3" style={{backgroundColor: "#eff0f5", marginBottom: "2px"}}>
+              <div className="model-tag d-inline-flex px-2 me-1 rounded-3" style={{marginBottom: "2px"}}>
                 {tag.tipo}&nbsp;
                 {tag.valor && (
                   <strong>{tag.valor}</strong>
@@ -152,7 +154,7 @@ const ArticleDetails = () => {
           <div className="container p-0">
             {data?.whatsapp !== undefined && data?.whatsapp !== null && data?.whatsapp !== "" && (
             <button 
-            className="ms-2 rounded-3 border-0 px-3 py-1 mb-2" 
+            className="ms-2 rounded-3 border-0 px-3 py-1 mb-2 text-light" 
             onClick={handleWhatsAppClick}
             style={{backgroundColor: "#c90035"}}>
               <i className="bi bi-whatsapp fs-5"></i>
@@ -160,7 +162,7 @@ const ArticleDetails = () => {
             )}
             {data?.telegram !== undefined && data?.telegram !== null && data?.telegram !== "" && (
             <button 
-            className="ms-2 rounded-3 border-0 px-3 py-1 mb-2" 
+            className="ms-2 rounded-3 border-0 px-3 py-1 mb-2 text-light" 
             onClick={handleTelegramClick}
             style={{backgroundColor: "#c90035"}}>
               <i className="bi bi-telegram fs-5"></i>
@@ -174,23 +176,23 @@ const ArticleDetails = () => {
     </div>
 
     <div className="container mt-5">
-      <nav className="navbar navbar-expand-lg navbar-light">
+      <nav className="navbar navbar-expand-lg ">
         <div className="container custom-container justify-content-center">
-          <ul className="navbar-nav bg-light p-1 rounded-4">
+          <ul className="navbar-nav model-tag p-1 rounded-4">
             <li className="nav-item d-flex justify-content-center">
-              <a className="nav-link" href="#galeria">Galería</a>
+              <a className="model-tag nav-link" href="#galeria">Galería</a>
             </li>
             <li className="nav-item d-flex justify-content-center">
-              <a className="nav-link" href="#servicios">Servicios</a>
+              <a className="model-tag nav-link" href="#servicios">Servicios</a>
             </li>
             <li className="nav-item d-flex justify-content-center">
-              <a className="nav-link" href="#mapa">Mapa</a>
+              <a className="model-tag nav-link" href="#mapa">Mapa</a>
             </li>
             <li className="nav-item d-flex justify-content-center">
-              <a className="nav-link" href="#comentarios">Comentarios</a>
+              <a className="model-tag nav-link" href="#comentarios">Comentarios</a>
             </li>
             <li className="nav-item d-flex justify-content-center">
-              <a className="nav-link" href="#experiencia">Experiencia</a>
+              <a className="model-tag nav-link" href="#experiencia">Experiencia</a>
             </li>
           </ul>
         </div>

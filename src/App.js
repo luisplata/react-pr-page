@@ -4,8 +4,20 @@ import Home from "./pages/Home";
 import ArticleDetails from "./pages/ArticleDetails";
 import Feed from "./pages/Feed";
 import Records from "./pages/Records.js";
+import "./App.css";
+
 
 const App = () => {
+  const selectedTheme = localStorage.getItem("selectedTheme");
+
+  const setDarkMode = () => {
+    document.querySelector("body").setAttribute("data-theme", "dark");
+    localStorage.setItem("selectedTheme", "dark");
+}
+
+  if(selectedTheme === "dark"){
+      setDarkMode();
+  }
   return (
     <Router>
       <Routes>
