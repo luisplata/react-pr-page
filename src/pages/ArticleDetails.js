@@ -45,15 +45,20 @@ const ArticleDetails = () => {
 
   const services = [];
   const subServices = [];
+  const displayedTags = [];
 
   if(data){
+    let cont = 0;
     for (let prop of data.tags){
-      
+
       const propTipo = prop.tipo.toLowerCase();
       
-      if (prop.tipo === "Servicios" )
-        services.push(prop.valor)
-      else if(propTipo.includes("virtuales") || propTipo.includes("adicionales") || propTipo.includes("fantasias") || propTipo.includes("métodos de pago")){
+      if (prop.tipo === "Servicios" ){
+        services.push(prop.valor);
+      }
+        
+      else if(propTipo.includes("virtuales") || propTipo.includes("adicionales") || propTipo.includes("fantasias") || propTipo.includes("métodos de pago") || 
+        propTipo.includes("masajes") || propTipo.includes("oral") || propTipo.includes("presencial")){
         let obj = subServices.find(item => item.name === prop.tipo);
         
         if (obj) {
@@ -62,6 +67,10 @@ const ArticleDetails = () => {
             subServices.push({ name: prop.tipo, list: [prop.valor] });
         }
       }
+      else{
+        displayedTags.push(prop);
+      }
+      cont++;
     }
     
   }
@@ -112,7 +121,7 @@ const ArticleDetails = () => {
             ))} */}
           </div>
           <div >
-            {data?.tags.map((tag, index) => (
+            {displayedTags?.map((tag, index) => (
               <div className="model-tag d-inline-flex px-2 me-1 rounded-3" style={{marginBottom: "2px"}}>
                 {tag.tipo}&nbsp;
                 {tag.valor && (
