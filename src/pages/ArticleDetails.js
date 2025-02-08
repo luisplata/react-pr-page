@@ -7,6 +7,7 @@ import Map from "../components/Map";
 import Comments from "../components/Comments";
 import Experiences from "../components/Experiences";
 import Footer from "../components/Footer";
+import { Link } from "react-scroll";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const MEDIA_BASE_URL = process.env.REACT_APP_MEDIA_BASE_URL;
@@ -189,20 +190,20 @@ const ArticleDetails = () => {
         <div className="container custom-container justify-content-center">
           <ul className="navbar-nav model-tag p-1 rounded-4">
             <li className="nav-item d-flex justify-content-center">
-              <a className="model-tag nav-link" href="#galeria">Galería</a>
+              <Link className="model-tag nav-link" to="galeria">Galería</Link>
             </li>
             <li className="nav-item d-flex justify-content-center">
-              <a className="model-tag nav-link" href="#servicios">Servicios</a>
+              <Link className="model-tag nav-link" to="servicios">Servicios</Link>
+            </li>
+            {/* <li className="nav-item d-flex justify-content-center">
+              <Link className="model-tag nav-link" to="mapa">Mapa</Link>
             </li>
             <li className="nav-item d-flex justify-content-center">
-              <a className="model-tag nav-link" href="#mapa">Mapa</a>
+              <Link className="model-tag nav-link" to="comentarios">Comentarios</Link>
             </li>
             <li className="nav-item d-flex justify-content-center">
-              <a className="model-tag nav-link" href="#comentarios">Comentarios</a>
-            </li>
-            <li className="nav-item d-flex justify-content-center">
-              <a className="model-tag nav-link" href="#experiencia">Experiencia</a>
-            </li>
+              <Link className="model-tag nav-link" to="experiencia">Experiencia</Link>
+            </li> */}
           </ul>
         </div>
       </nav>
@@ -211,9 +212,9 @@ const ArticleDetails = () => {
         <Galery items={data?.media}/>
         <Services services={services}
             subServices={subServices} />
-        <Map location={globalLocation}/>
+        {/* <Map location={globalLocation}/>
         <Comments />
-        <Experiences />
+        <Experiences /> */}
         </div>
         </article>
     
