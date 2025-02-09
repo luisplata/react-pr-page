@@ -80,147 +80,120 @@ const ArticleDetails = () => {
     <div>
         <Header></Header>
         <article className="container-fluid">
-        <div className="container mt-5">
-      <div className="row">
-        <div className="col-md-3 text-center">
-          <div 
-            style={{maxWidth: 250,
-              maxHeight: 250,
-              margin: "auto",
-              position: "relative",
-              overflow: "hidden",
-            }}
-          >
-            <img
-              src={MEDIA_BASE_URL + data?.media[0].file_path}
-              alt="Imagen de la persona"
-              className="rounded-circle"
-              style={{
-                width: "100%",
-                aspectRatio: "1/1",
-                objectFit: "cover",
-            }}
-            />
-          </div>
-          
-        </div>
-        <div className="col-md-6">
-          <h4>{data?.nombre}</h4>
-          <div >
-            {/* {ejemploPersona.categorias.map((categoria, index) => (
-              <span
-                key={index}
-                className="badge text-light me-1"
-                style={{
-                  backgroundColor: "#038093",
-                  padding: "5px 5px",
-                  borderRadius: "5px",
+          <div className="container mt-5">
+            <div className="row">
+              <div className="col-md-3 text-center">
+                <div 
+                  style={{maxWidth: 250,
+                  maxHeight: 250,
+                  margin: "auto",
+                  position: "relative",
+                  overflow: "hidden",
                 }}
-              >
-                {categoria}
-              </span>
-            ))} */}
-          </div>
-          <div >
-            {displayedTags?.map((tag, index) => (
-              <div className="model-tag d-inline-flex px-2 me-1 rounded-3" style={{marginBottom: "2px"}}>
-                {tag.tipo}&nbsp;
-                {tag.valor && (
-                  <strong>{tag.valor}</strong>
-                )}
-              </div>
-            ))}
-          </div>
-
-          <div className="row mt-3">
-            <div className="col-md-8">
-              <h5>Descripción</h5>
-              <p>
-                {mostrarCompleto
-                  ? data?.about
-                  : data?.about.slice(0, 150) + (data?.about.length > 150 ? "..." : "")}
-                  {data?.about.length > 150 && (
-                <button
-                  className="btn btn-link p-0 ps-1 pb-1 m-0 border-0 text-decoration-none"
-                  style={{
-                    color: "#038093"
-                  }}
-                  onClick={toggleDescripcion}
                 >
-                  {mostrarCompleto ? "Mostrar menos" : "Mostrar más"}
-                </button>
-              )}
-              </p>
-              
-            </div>
-            <div className="col-md-4">
-              <h5>Horario Disponible</h5>
-              <p>{data?.horario}</p>
-            </div>
-          </div>
-        </div>
+                  <img
+                    src={MEDIA_BASE_URL + data?.media[0].file_path}
+                    alt="Imagen de la persona"
+                    className="rounded-circle"
+                    style={{
+                      width: "100%",
+                      aspectRatio: "1/1",
+                      objectFit: "cover",
+                    }}  
+                  />
+                </div>
+              </div>
+              <div className="col-md-6">
+                <h4>{data?.nombre}</h4>
+                <div >
+                </div>
+                <div >
+                  {displayedTags?.map((tag, index) => (
+                    <div className="model-tag d-inline-flex px-2 me-1 rounded-3" style={{marginBottom: "2px"}}>
+                      {tag.tipo}&nbsp;
+                      {tag.valor && (
+                        <strong>{tag.valor}</strong>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="row mt-3">
+                  <div className="col-md-8">
+                    <h5>Descripción</h5>
+                    <p>
+                      {mostrarCompleto
+                        ? data?.about
+                        : data?.about.slice(0, 150) + (data?.about.length > 150 ? "..." : "")}
+                        {data?.about.length > 150 && (
+                      <button
+                        className="btn btn-link p-0 ps-1 pb-1 m-0 border-0 text-decoration-none"
+                        style={{
+                          color: "#038093"
+                        }}
+                        onClick={toggleDescripcion}
+                      >
+                        {mostrarCompleto ? "Mostrar menos" : "Mostrar más"}
+                      </button>
+                    )}
+                    </p>
+                    
+                  </div>
+                  <div className="col-md-4">
+                    <h5>Horario Disponible</h5>
+                    <p>{data?.horario}</p>
+                  </div>
+                </div>
+              </div>
         
-        <div className="col-md-3 text-end">
-          <div className="container p-0">
-            {data?.whatsapp !== undefined && data?.whatsapp !== null && data?.whatsapp !== "" && (
-            <button 
-            className="ms-2 rounded-3 border-0 px-3 py-1 mb-2 text-light" 
-            onClick={handleWhatsAppClick}
-            style={{backgroundColor: "#c90035"}}>
-              <i className="bi bi-whatsapp fs-5"></i>
-            </button>
-            )}
-            {data?.telegram !== undefined && data?.telegram !== null && data?.telegram !== "" && (
-            <button 
-            className="ms-2 rounded-3 border-0 px-3 py-1 mb-2 text-light" 
-            onClick={handleTelegramClick}
-            style={{backgroundColor: "#c90035"}}>
-              <i className="bi bi-telegram fs-5"></i>
-            </button>
-            )}
+              <div className="col-md-3 text-end">
+                <div className="container p-0">
+                  {data?.whatsapp !== undefined && data?.whatsapp !== null && data?.whatsapp !== "" && (
+                  <button 
+                  className="ms-2 rounded-3 border-0 px-3 py-1 mb-2 text-light" 
+                  onClick={handleWhatsAppClick}
+                  style={{backgroundColor: "#c90035"}}>
+                    <i className="bi bi-whatsapp fs-5"></i>
+                  </button>
+                  )}
+                  {data?.telegram !== undefined && data?.telegram !== null && data?.telegram !== "" && (
+                  <button 
+                  className="ms-2 rounded-3 border-0 px-3 py-1 mb-2 text-light" 
+                  onClick={handleTelegramClick}
+                  style={{backgroundColor: "#c90035"}}>
+                    <i className="bi bi-telegram fs-5"></i>
+                  </button>
+                  )}
+                </div>
+                <h5>Tarifa por hora</h5>
+                <h3>${data?.tarifa}</h3>
+              </div>
+            </div>
           </div>
-          <h5>Tarifa por hora</h5>
-          <h3>${data?.tarifa}</h3>
-        </div>
-      </div>
-    </div>
 
-    <div className="container mt-5">
-      <nav className="navbar navbar-expand-lg ">
-        <div className="container custom-container justify-content-center">
-          <ul className="navbar-nav model-tag p-1 rounded-4">
-            <li className="nav-item d-flex justify-content-center">
-              <Link className="model-tag nav-link" to="galeria">Galería</Link>
-            </li>
-            <li className="nav-item d-flex justify-content-center">
-              <Link className="model-tag nav-link" to="servicios">Servicios</Link>
-            </li>
-            {/* <li className="nav-item d-flex justify-content-center">
-              <Link className="model-tag nav-link" to="mapa">Mapa</Link>
-            </li>
-            <li className="nav-item d-flex justify-content-center">
-              <Link className="model-tag nav-link" to="comentarios">Comentarios</Link>
-            </li>
-            <li className="nav-item d-flex justify-content-center">
-              <Link className="model-tag nav-link" to="experiencia">Experiencia</Link>
-            </li> */}
-          </ul>
-        </div>
-      </nav>
+          <div className="container mt-5">
+            <nav className="navbar navbar-expand-lg ">
+              <div className="container custom-container justify-content-center">
+                <ul className="navbar-nav model-tag p-1 rounded-4">
+                  <li className="nav-item d-flex justify-content-center">
+                    <Link className="model-tag nav-link" to="galeria">Galería</Link>
+                  </li>
+                  <li className="nav-item d-flex justify-content-center">
+                    <Link className="model-tag nav-link" to="servicios">Servicios</Link>
+                  </li>
+                </ul>
+              </div>
+            </nav>
 
 
-        <Galery items={data?.media}/>
-        <Services services={services}
-            subServices={subServices} />
-        {/* <Map location={globalLocation}/>
-        <Comments />
-        <Experiences /> */}
-        </div>
+            <Galery items={data?.media}/>
+            <Services services={services}
+                subServices={subServices} />
+          </div>
         </article>
-    
         <Footer></Footer>
-    </div>
+      </div>
     );
-};
+  };
 
 export default ArticleDetails;
