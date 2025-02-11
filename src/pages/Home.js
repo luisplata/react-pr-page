@@ -18,7 +18,7 @@ const Home = () => {
     }, []);
 
     const articles = data;
-    const possibleCategory = ["dama", "virtual", "trans", "caballero"];
+    const possibleCategory = ["Dama", "Virtual", "Trans", "Caballero"];
 
     function getTags (){
         if (articles){
