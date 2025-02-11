@@ -36,3 +36,39 @@
     transform: rotate(360deg);
   }
 }
+
+:root {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --panel-bg-color: #ffffff;
+  --special-color: rgb(3, 128, 147);
+  --special-background-color: rgba(3, 128, 147, 0.4);
+  --tag-color: #656565;
+  --tag-bg-color: #eff0f5;
+}
+
+[data-theme="dark"] {
+  --bg-color: #18191a;
+  --text-color: #e4e6eb;
+  --panel-bg-color: #242526;
+  --tag-color: #a9a9a9;
+  --tag-bg-color: #202123;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.model-tag{
+  background-color: var(--tag-bg-color);
+  color: var(--tag-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.general-btn{
+  width: auto;
+  background-color: var(--special-background-color);
+  color: var(--special-color);
+}

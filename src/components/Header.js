@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useRef } from "react";
 import { Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import DarkMode from "./DarkMode";
 
 const Header = () => {
 
@@ -39,8 +40,14 @@ const Header = () => {
         <header className="py-2">
         <nav className="navbar navbar-expand-lg navbar-dark">
             <div className="container">
-                <a className="navbar-brand fs-1 text-dark" href="/"><img className="me-2 rounded-4" width={50} src="/image.jpg" alt="logo"></img></a>
-                <button
+                <button 
+                className="navbar-brand fs-1 text-dark" 
+                style={{
+                    border: "0px",
+                    backgroundColor: "transparent",
+                }}
+                onClick={() => handleArticleClick("")}><img className="me-2 rounded-4" width={50} src="/image.jpg" alt="logo"></img></button>
+                {/* <button
                     className="navbar-toggler"
                     type="button"
                     data-bs-toggle="collapse"
@@ -50,8 +57,9 @@ const Header = () => {
                     aria-label="Toggle navigation"
                 >
                     <span className="navbar-toggler-icon"></span>
-                </button>
-                <div className="collapse navbar-collapse" id="navbarNav">
+                </button> */}
+                <div>
+                {/* <div className="collapse navbar-collapse" id="navbarNav"> */}
                     <ul className="navbar-nav ms-auto">
                         {/* <li className="nav-item">
                             <a className="nav-link fs-5 ms-3 text-dark" onClick={() => handleArticleClick("feed")}><i className="bi bi-house-fill me-2"></i>Novedades</a>
@@ -98,26 +106,25 @@ const Header = () => {
                             </div>    
                             </i></a>
                         </li> */}
-                        {/* <li className="nav-item">
-                            <a className="nav-link fs-5 ms-3 text-dark" onClick={() => setShowOptionsMenu(!showOptionsMenu)}><i className="bi bi-three-dots-vertical me-2">
-                            <div style={{ position: "relative", display: "inline-block"}}>
+                        <li className="nav-item">
+                            <button className="nav-link fs-5" style={{color: "var(--text-color)"}} onClick={() => setShowOptionsMenu(!showOptionsMenu)}><i className="bi bi-three-dots-vertical me-2">
+                                </i></button>
+                                <div className="" style={{ position: "relative", display: "inline-block"}}>
                                 {showOptionsMenu && (
-                                    <Card
+                                    <div className="shadow-lg"
                                     style={{
+                                        translate: "-70%",
                                         position: "absolute",
-                                        top: "100%",
-                                        left: "0",
-                                        marginTop: "5px",
-                                        zIndex: 1000,
-                                        padding: "10px",
+                                        padding: "10px", 
+                                        backgroundColor: "var(--panel-bg-color)",
                                     }}
                                     >
-                                    Menu
-                                    </Card>
+                                    <DarkMode></DarkMode>
+                                    <button></button>
+                                    </div>
                                 )}
                             </div>
-                                </i></a>
-                        </li> */}
+                        </li>
                     </ul>
                 </div>
             </div>

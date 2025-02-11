@@ -1,33 +1,68 @@
 import React, { useState } from "react";
+import "./Modal.css"
 const MEDIA_BASE_URL = process.env.REACT_APP_MEDIA_BASE_URL;
 
 const Galeria = ({ items }) => {
   const [filter, setFilter] = useState("all");
+  const [modal, setModal] = useState(false);
+  const [modalMediaIndex, setModalMediaIndex] = useState(0);
+  const nextMedia = (next)=>{
+    if(items){
+        let newIndex = 0;
+        if(next){
+            newIndex = modalMediaIndex + 1 < paths.length ? modalMediaIndex + 1: 0;
+        }
+        else{
+            newIndex = modalMediaIndex === 0 ? paths.length - 1: modalMediaIndex - 1;
+        }
+        setModalMediaIndex(newIndex);
+    }
+  }
+
+  const toggleModal = ()=> {    
+    setModal(!modal);
+  }
+  const paths = [];
+  
+  if(items)
+  {for(let item of items){
+    paths.push({
+        type: item.type,
+        media: MEDIA_BASE_URL+item.file_path
+    });
+  }}
 
   const filteredItems = items?.filter((item) =>
     filter === "all" ? true : item.type === filter
   );
 
-  return (
-    <div id="galeria" style={{ padding: "20px"}}>
-      <h2 className="mb-3">Galería</h2>
+  if (modal){
+    document.body.classList.add('active-modal')
+  }
+  else {
+    document.body.classList.remove('active-modal')
+  }
 
-      <div className="d-flex flex-wrap gap-2 justify-content-start" style={{ marginBottom: "10px", gap: "8px" }}>
+  return (
+    <div style={{ padding: "20px"}}>
+      <h2 style={{textAlign: "center"}} className="my-3">Galería</h2>
+
+      <div className="d-flex flex-wrap gap-2 justify-content-center" style={{ marginBottom: "10px", gap: "8px" }}>
         <button
-            type="button" class="btn" style={{background: "rgba(3, 128, 147, 0.4)", color: "rgb(3, 128, 147)"}}
+            type="button" class="btn" style={{background: "var(--special-background-color)", color: "var(--special-color)"}}
             onClick={() => setFilter("all")}
         >
             Todos
         </button>
         <button
-            type="button" class="btn" style={{background: "rgba(3, 128, 147, 0.4)", color: "rgb(3, 128, 147)"}}
+            type="button" class="btn" style={{background: "var(--special-background-color)", color: "var(--special-color)"}}
             
             onClick={() => setFilter("image")}
         >
             Fotos
         </button>
         <button
-            type="button" class="btn" style={{background: "rgba(3, 128, 147, 0.4)", color: "rgb(3, 128, 147)"}}
+            type="button" class="btn" style={{background: "var(--special-background-color)", color: "var(--special-color)"}}
             
             onClick={() => setFilter("video")}
         >
@@ -35,26 +70,29 @@ const Galeria = ({ items }) => {
         </button>
         </div>
 
-      <div
-        style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, 250px)",
-            gap: "1px",
-            justifyContent: "start",
-        }}
+      <div 
         >
-        {filteredItems?.map((item, index) => (
-            <div
+        {
+        filteredItems?.map((item, index) => (
+            <button
+            className="mb-5"
             key={index}
+            onClick={()=> {
+
+                setModalMediaIndex(index);
+                toggleModal();}}
             style={{
-                width: "250px",
-                height: "250px",
-                overflow: "hidden",
+                width: "100%",
+                maxWidth: "500px",
                 borderRadius: "5px",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
                 backgroundColor: "#f0f0f0",
+                border: "0px",
+                padding: "0px",
+                margin: "auto",
+                marginBottom: "50px",
             }}
             >
             {item.type === "image" ? (
@@ -62,11 +100,7 @@ const Galeria = ({ items }) => {
                 src={MEDIA_BASE_URL+item.file_path}
                 alt={item.alt || "Foto"}
                 style={{
-                    maxWidth: "100%",
-                    maxHeight: "100%",
-                    minWidth: "100%",
-                    minHeight: "100%",
-                    objectFit: "cover",
+                    width: "100%",
                 }}
                 />
             ) : (
@@ -82,9 +116,44 @@ const Galeria = ({ items }) => {
                 Tu navegador no soporta videos.
                 </video>
             )}
-            </div>
+            </button>
         ))}
         </div>
+        {modal && (
+            <div className="modal1">
+            <div className="overlay1"
+            onClick= {toggleModal}
+            ></div>
+            <div className="modal-content1 model-tag">
+                <button className="chevronButton fs-1" onClick={()=> nextMedia(false)}><i className="bi bi-chevron-left model-tag"></i></button>
+                <div
+                style={{height: "100%"}}
+                >
+                {paths[modalMediaIndex].type === "image" ? (
+                    <img
+                    style={{
+                        height: "100%",
+                        maxWidth: "100%",
+                        objectFit: "contain",
+                    }}
+                src={paths[modalMediaIndex].media} alt="imagen"></img>
+                ) : (
+                    <video
+                    controls
+                    style={{
+                        height: "100%",
+                        maxWidth: "100%",
+                        objectFit: "contain",
+                    }}
+                >
+                    <source  src={paths[modalMediaIndex].media} type="video/mp4" />
+                </video>
+                )}
+                </div>
+                <button className="chevronButton fs-1" onClick={()=> nextMedia(true)}><i className="bi bi-chevron-right model-tag"></i></button>
+            </div>
+        </div>
+    )}
     </div>
   );
 };

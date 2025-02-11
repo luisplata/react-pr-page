@@ -1,29 +1,33 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Link } from "react-scroll";
 
 const Footer = () => {
   return (
-    <footer className="bg-dark text-light py-4">
+    <footer className="py-4 model-tag">
       <div className="container">
         <div className="row">
-          <div className="col-md-4 mb-3">
-            <h5>Contacto</h5>
-            <p>Email: hello@lobasvip.com.ve</p>
-            <p>Telegran : t.me/El_Lobo_2109</p>
+          <div className="col-md-6 mb-3 d-flex justify-content-center">
+            <div>
+              <h5>Contacto</h5>
+              <p>Email: hello@lobasvip.com.ve</p>
+              <p>Telegran : t.me/El_Lobo_2109</p>
+            </div>
           </div>
 
-          <div className="col-md-4 mb-3">
+          {/* <div className="col-md-4 mb-3">
             <h5>Enlaces</h5>
             <ul className="list-unstyled">
-              <li><a href="#galeria" className="text-light text-decoration-none">Galería</a></li>
-              <li><a href="#servicios" className="text-light text-decoration-none">Servicios</a></li>
-              <li><a href="#mapa" className="text-light text-decoration-none">Mapa</a></li>
-              <li><a href="#comentarios" className="text-light text-decoration-none">Comentarios</a></li>
-              <li><a href="#experiencia" className="text-light text-decoration-none">Experiencia</a></li>
+              <li><Link to="galeria" className="model-tag text-decoration-none" smooth="true" duration={500}>Galería</Link></li>
+              <li><a href="#servicios" className="model-tag text-decoration-none">Servicios</a></li>
+              <li><a href="#mapa" className="model-tag text-decoration-none">Mapa</a></li>
+              <li><a href="#comentarios" className="model-tag text-decoration-none">Comentarios</a></li>
+              <li><a href="#experiencia" className="model-tag text-decoration-none">Experiencia</a></li>
             </ul>
-          </div>
+          </div> */}
 
-          <div className="col-md-4 mb-3">
+          <div className="col-md-6 mb-3 d-flex justify-content-center">
+            <div>
             <h5>Síguenos</h5>
             <a
               href="https://www.tiktok.com/@lobas.vip?_t=ZM-8tJQYRXlH8P&_r=1"
@@ -31,7 +35,7 @@ const Footer = () => {
               rel="noopener noreferrer"
               className="text-light me-3"
             >
-              <i className="bi bi-tiktok" style={{ fontSize: "1.5rem" }}></i>
+              <i className="model-tag bi bi-tiktok" style={{ fontSize: "1.5rem" }}></i>
             </a>
             <a
               href="https://x.com/LobasVip?t=gDeAKbkne6kd_GoHxU2e2g&s=09"
@@ -39,7 +43,7 @@ const Footer = () => {
               rel="noopener noreferrer"
               className="text-light me-3"
             >
-              <i className="bi bi-twitter" style={{ fontSize: "1.5rem" }}></i>
+              <i className="model-tag bi bi-twitter" style={{ fontSize: "1.5rem" }}></i>
             </a>
             <a
               href="https://www.instagram.com/lobas_vip?igsh=Y2tycTB5ZnBoNmZk"
@@ -47,8 +51,9 @@ const Footer = () => {
               rel="noopener noreferrer"
               className="text-light"
             >
-              <i className="bi bi-instagram" style={{ fontSize: "1.5rem" }}></i>
+              <i className="model-tag bi bi-instagram" style={{ fontSize: "1.5rem" }}></i>
             </a>
+          </div>
           </div>
         </div>
 

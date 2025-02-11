@@ -18,6 +18,7 @@ const Home = () => {
     }, []);
 
     const articles = data;
+    const possibleCategory = ["dama", "virtual", "trans", "caballero"];
 
     function getTags (){
         if (articles){
@@ -62,20 +63,27 @@ const Home = () => {
 
             
         let matchesCategories = false;
-
-        for (let articleTag of article.tags){
-            if (filters.categories.length === 0 ||
-                filters.categories.some((category) =>
-                    articleTag.valor.includes(category)
-                ))
-            {
-                    matchesCategories = true; 
-                    break;}
-        }
-            
-
         
-            
+        if(filters.categories.length > 0)
+        {
+            if(article.tags.some(tag => tag.tipo === "categoria"))
+            {
+                console.log("hayCategoria");
+                
+                const categoryValue = article.tags.find(tag => tag.tipo === "categoria").valor.toLowerCase();
+
+                for (let category of filters.categories){
+                    console.log(categoryValue);
+                    
+                    if (categoryValue && categoryValue.includes(category)){
+                        matchesCategories = true;
+                        break;
+                    }
+                }
+            }
+        }
+        else if(article.media.length > 0) matchesCategories = true;
+        //const matchesCategories = categoryValue.
 
         return matchesName && matchesZone && matchesCategories;
     });
@@ -90,7 +98,7 @@ const Home = () => {
                 <h3>Modelos</h3>
                 
             </div>
-            <Filters setFilters={setFilters} zones = {articles? getZones() : ["Zona 1", "Zona 2", "Zona 3"]} categories = {articles ? getTags() : ["Categoria 1", "Categoria 2"]}/>
+            <Filters setFilters={setFilters} zones = {articles? getZones() : ["Zona 1", "Zona 2", "Zona 3"]} categories = {possibleCategory}/>
             <ArticleList quality="Disponibles" articles={filteredArticles} />
             <Footer></Footer>    
         </div>
