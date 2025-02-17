@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./Modal.css"
 const MEDIA_BASE_URL = process.env.REACT_APP_MEDIA_BASE_URL;
 
 const Galeria = ({ items }) => {

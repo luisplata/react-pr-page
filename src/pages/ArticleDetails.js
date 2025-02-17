@@ -3,9 +3,6 @@ import { useParams} from "react-router-dom";
 import Header from "../components/Header";
 import Galery from "../components/Galery";
 import Services from "../components/Services";
-import Map from "../components/Map";
-import Comments from "../components/Comments";
-import Experiences from "../components/Experiences";
 import Footer from "../components/Footer";
 import { Link } from "react-scroll";
 
@@ -23,10 +20,9 @@ const ArticleDetails = () => {
       .then((response) => response.json())
       .then((data) => setData(data))
       .catch((error) => console.error("Error al obtener los datos:", error));
-  }, []);
+  }, );
 
 
-  const globalLocation = { lat: 19.432608, lng: -99.133209 };
 
   const [mostrarCompleto, setMostrarCompleto] = useState(false);
 
@@ -49,7 +45,6 @@ const ArticleDetails = () => {
   const displayedTags = [];
 
   if(data){
-    let cont = 0;
     for (let prop of data.tags){
 
       const propTipo = prop.tipo.toLowerCase();
@@ -71,9 +66,7 @@ const ArticleDetails = () => {
       else{
         displayedTags.push(prop);
       }
-      cont++;
     }
-    
   }
 
   return (
