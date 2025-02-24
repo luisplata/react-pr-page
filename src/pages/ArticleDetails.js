@@ -20,9 +20,16 @@ const ArticleDetails = () => {
       .then((response) => response.json())
       .then((data) => setData(data))
       .catch((error) => console.error("Error al obtener los datos:", error));
-  }, );
+  }, []);
 
-
+  useEffect(() => {
+        
+    fetch(`${API_BASE_URL}increment/${id}`)
+      .then((response) => response.json())
+      .then((json) => console.log(json)
+      )
+      .catch((error) => console.error("Error:", error));
+  }, []);
 
   const [mostrarCompleto, setMostrarCompleto] = useState(false);
 
