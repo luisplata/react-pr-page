@@ -9,6 +9,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    environment: production
 
     steps:
       - name: 📥 Checkout del código
@@ -17,12 +18,12 @@ jobs:
       - name: 📦 Instalar dependencias
         run: npm install
 
-      - name: 📄 Crear archivo .env desde los secretos
+      - name: 📄 Crear archivo .env con variables de producción
         run: |
           echo "REACT_APP_API_BASE_URL=${{ secrets.REACT_APP_API_BASE_URL }}" >> .env
           echo "REACT_APP_MEDIA_BASE_URL=${{ secrets.REACT_APP_MEDIA_BASE_URL }}" >> .env
 
-      - name: ⚙️ Construir la aplicación
+      - name: ⚙️ Construir la aplicación (Modo Producción)
         run: npm run build
 
       - name: 🔍 Verificar si la carpeta build existe
