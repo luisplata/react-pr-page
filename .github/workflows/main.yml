@@ -9,6 +9,7 @@ on:
 jobs:
   export-and-deploy:
     runs-on: ubuntu-latest
+    environment: dev
     outputs:
       artifact_url: ${{ steps.generate_artifact.outputs.artifact_url }}
     steps:
