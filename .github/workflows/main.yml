@@ -2,9 +2,9 @@ name: Deploy React App
 
 on:
   workflow_dispatch: {}
-  push:
+  pull_request:
     branches:
-      - main  # Cambia esto si usas otra rama
+      - deploy
 
 jobs:
   export-and-deploy:
@@ -56,6 +56,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    environment: dev
     needs: export-and-deploy
     steps:
 
