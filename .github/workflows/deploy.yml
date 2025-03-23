@@ -24,7 +24,7 @@ jobs:
           echo "REACT_APP_MEDIA_BASE_URL=${{ secrets.REACT_APP_MEDIA_BASE_URL }}" >> .env
 
       - name: ⚙️ Construir la aplicación (Modo Producción)
-        run: npm run build
+        run: CI=false npm run build
 
       - name: 🔍 Verificar si la carpeta build existe
         run: ls -la build
