@@ -31,13 +31,13 @@ jobs:
 
       - name: 🗜️ Comprimir el build
         run: |
-          cd dist
+          cd build
           zip -r ../build.zip .
 
       - name: Validate build.zip
         run: |
-          echo "Listing contents of dist directory:"
-          ls -la dist
+          echo "Listing contents of build directory:"
+          ls -la build
           echo "Checking build.zip:"
           ls -la build.zip || echo "build.zip not found!"
 
