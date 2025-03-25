@@ -1,4 +1,4 @@
-import { use, useState } from "react";
+import { use, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -10,60 +10,17 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const MEDIA_BASE_URL = process.env.REACT_APP_MEDIA_BASE_URL;
 
 const Dashboard = () => {
-  const navigate = useNavigate();
-  
+
+  const navigate = useNavigate(); 
+  const [token, setToken] = useState()
   const [modal, setModal] = useState(false); 
   const [actionText, setActionText] = useState("");
   const [handleAction, setHandleAction] = useState(null);
   const toggleModal = ()=> {        
     setModal(!modal);
   }
-
   const [error, setError] = useState(null);
   const [form, setForm] = useState(0);
-
-  const [loginData, setLoginData] = useState({
-    email: "",
-    password: "",
-  });    
-  const [token, setToken] = useState(null);
-  const handleChangeLogin = (e) => {
-    setLoginData({
-      ...loginData,
-      [e.target.name]: e.target.value,
-    });
-  };
-  const handleSubmitLogin = async (e) => {
-    e.preventDefault();
-    setError(null);
-      
-    try {
-      const response = await fetch(`${API_BASE_URL}login`, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(loginData),
-      });
-
-      if (!response.ok){
-        throw new Error("Error al autenticar");
-      }
-
-      const result = await response.json();
-      setError(null);
-      setToken(result.token);
-      setCreateData({
-        ...createData,
-        "token": result.token,
-      });
-      setNewTag({
-        ...newTag,
-        "token": result.token,
-      });
-    } catch (error) {
-      setError(error.message);
-    }
-  };
-
   const [createData, setCreateData] = useState({
     nombre: "",
     about: "",
@@ -74,7 +31,9 @@ const Dashboard = () => {
     mapa: "",
     token: "",
   });
-
+  useEffect(()=>{
+    setToken(localStorage.getItem("token"));
+  },[])
   
   const [currentModel, setcurrentModel] = useState(null);
   const handleChangeCreate = (e) => {
@@ -208,46 +167,6 @@ const Dashboard = () => {
     }
   };
 
-  const [newTag, setNewTag] = useState({
-    tipo: "",
-    valor: "",
-    token: "",
-  })
-
-  const handleChangeTag = (e) => {
-    setNewTag({
-      ...newTag,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleCreateTag = async (e, tagTipo) => {
-    e?.preventDefault();
-    setError(null);      
-    try {
-      const response = await fetch(`${API_BASE_URL}add-tag/${modelToSearchId}`, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(tagTipo ? {
-          tipo: tagTipo,
-          valor: newTag.valor,
-          token: newTag.token,
-        } : newTag),
-      });
-
-      if (!response.ok){
-        throw new Error("Error al autenticar");
-      }
-
-      const result = await response.json();
-      console.log(result);
-      handleGetPerson();
-      
-    } catch (error) {
-      setError(error.message);
-    }
-  };
-
   const services = [];
   const subServices = [];
   const displayedTags = [];
@@ -361,7 +280,7 @@ const Dashboard = () => {
                                   </>
                                 ))}
                                 <br/>
-                                <AddTag handleChangeTag={handleChangeTag} newTag={newTag} handleCreateTag={handleCreateTag}/>
+                                <AddTag token={token} setError={setError} modelToSearchId={modelToSearchId} handleGetPerson={handleGetPerson}/>
                                 
                                 </>) : "Tags (Disponible en paso 2)"}
                               </div>
@@ -551,7 +470,7 @@ const Dashboard = () => {
                               <DeleteTagButton  setError={setError} token={token} tag={tag.id} handleGetPerson={handleGetPerson}/>
                             </>
                             ))}
-                            <AddTag handleChangeTag={handleChangeTag} newTag={newTag} handleCreateTag={handleCreateTag} tagTipo={"Métodos de Pago"}/>
+                            <AddTag token={token} setError={setError} modelToSearchId={modelToSearchId} handleGetPerson={handleGetPerson} tagTipo={"Métodos de Pago"}/>
                             <h4 className="mt-3">Presenciales</h4>
                             {subServices.find((subServive) => subServive.name.toLowerCase() === "presencial")?.list.map((tag) => (
                               <>
@@ -559,7 +478,7 @@ const Dashboard = () => {
                               <DeleteTagButton  setError={setError} token={token} tag={tag.id} handleGetPerson={handleGetPerson}/>
                             </>
                             ))}
-                            <AddTag handleChangeTag={handleChangeTag} newTag={newTag} handleCreateTag={handleCreateTag} tagTipo={"Presencial"}/>
+                            <AddTag token={token} tagTipo={"Presencial"} setError={setError} modelToSearchId={modelToSearchId} handleGetPerson={handleGetPerson}/>
                             <h4 className="mt-3">Virtuales</h4>
                             {subServices.find((subServive) => subServive.name.toLowerCase() === "virtuales")?.list.map((tag) => (
                               <>
@@ -567,7 +486,7 @@ const Dashboard = () => {
                               <DeleteTagButton  setError={setError} token={token} tag={tag.id} handleGetPerson={handleGetPerson}/>
                             </>
                             ))}
-                            <AddTag handleChangeTag={handleChangeTag} newTag={newTag} handleCreateTag={handleCreateTag} tagTipo={"Virtuales"}/>
+                            <AddTag token={token} setError={setError} modelToSearchId={modelToSearchId} handleGetPerson={handleGetPerson} tagTipo={"Virtuales"}/>
                             <h4 className="mt-3">Masajes</h4>
                             {subServices.find((subServive) => subServive.name.toLowerCase() === "masajes")?.list.map((tag) => (
                               <>
@@ -575,7 +494,7 @@ const Dashboard = () => {
                               <DeleteTagButton  setError={setError} token={token} tag={tag.id} handleGetPerson={handleGetPerson}/>
                             </>
                             ))}
-                            <AddTag handleChangeTag={handleChangeTag} newTag={newTag} handleCreateTag={handleCreateTag} tagTipo={"Masajes"}/>
+                            <AddTag token={token} setError={setError} modelToSearchId={modelToSearchId} handleGetPerson={handleGetPerson} tagTipo={"Masajes"}/>
                             <h4 className="mt-3">Oral</h4>
                             {subServices.find((subServive) => subServive.name.toLowerCase() === "oral")?.list.map((tag) => (
                               <>
@@ -583,7 +502,7 @@ const Dashboard = () => {
                               <DeleteTagButton  setError={setError} token={token} tag={tag.id} handleGetPerson={handleGetPerson}/>
                             </>
                             ))}
-                            <AddTag handleChangeTag={handleChangeTag} newTag={newTag} handleCreateTag={handleCreateTag} tagTipo={"Oral"}/>
+                            <AddTag token={token} setError={setError} modelToSearchId={modelToSearchId} handleGetPerson={handleGetPerson} tagTipo={"Oral"}/>
                             <h4 className="mt-3">Fantasias</h4>
                             {subServices.find((subServive) => subServive.name.toLowerCase() === "fantasias")?.list.map((tag) => (
                               <>
@@ -591,7 +510,7 @@ const Dashboard = () => {
                                 <DeleteTagButton  setError={setError} token={token} tag={tag.id} handleGetPerson={handleGetPerson}/>
                               </>
                             ))}
-                            <AddTag handleChangeTag={handleChangeTag} newTag={newTag} handleCreateTag={handleCreateTag} tagTipo={"Fantasias"}/>
+                            <AddTag token={token} setError={setError} modelToSearchId={modelToSearchId} handleGetPerson={handleGetPerson} tagTipo={"Fantasias"}/>
                             <h4 className="mt-3">Adicionales</h4>
                             {subServices.find((subServive) => subServive.name.toLowerCase() === "adicionales")?.list.map((tag) => (
                               <>
@@ -599,7 +518,7 @@ const Dashboard = () => {
                               <DeleteTagButton  setError={setError} token={token} tag={tag.id} handleGetPerson={handleGetPerson}/>
                             </>
                             ))}
-                            <AddTag handleChangeTag={handleChangeTag} newTag={newTag} handleCreateTag={handleCreateTag} tagTipo={"Adicionales"}/>
+                            <AddTag token={token} setError={setError} modelToSearchId={modelToSearchId} handleGetPerson={handleGetPerson} tagTipo={"Adicionales"}/>
                           </div>
                           
                         </div>
@@ -626,33 +545,7 @@ const Dashboard = () => {
               </>) 
               : (
               <div>
-                  <form className="d-flex justify-content-center" onSubmit={handleSubmitLogin}>
-                      <div className="d-inline-flex justify-content-center flex-column mb-3" >
-                          <input
-                              type="text"
-                              name="email"
-                              className="t-0 model-tag rounded-4 p-1 text-center"
-                              style={{borderColor: "var(--tag-color)"}} 
-                              placeholder="Usuario"
-                              value={loginData.email}
-                              onChange={handleChangeLogin}
-                              required
-                          /> 
-                          <br/>
-                          <input
-                              type="password"
-                              name="password"
-                              className="t-0 model-tag rounded-4 p-1 text-center"
-                              style={{borderColor: "var(--tag-color)"}} 
-                              placeholder="Contraseña"
-                              value={loginData.password}
-                              onChange={handleChangeLogin}
-                              required
-                          />
-                          <br></br>
-                          <button className="btn general-btn mt-2" type="submit">Ingresar</button>
-                      </div>
-                  </form>
+                  
               </div>)}
           {error && <p style={{ color: "red" }}>{error}</p>}
 

@@ -10,7 +10,7 @@ const Home = () => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        
+               
       fetch(`${API_BASE_URL}people`)
         .then((response) => response.json())
         .then((json) => setData(json))
