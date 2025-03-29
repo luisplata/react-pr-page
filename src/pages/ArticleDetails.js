@@ -23,13 +23,24 @@ const ArticleDetails = () => {
   }, []);
 
   useEffect(() => {
-        
-    fetch(`${API_BASE_URL}increment/${id}`)
-      .then((response) => response.json())
-      .then((json) => console.log(json)
-      )
-      .catch((error) => console.error("Error:", error));
-  }, []);
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}increment/${id}`);
+  
+        if (!response.ok){
+          throw new Error("Error al buscar persona");
+        }
+  
+        const result = await response.json();
+        console.log(result);
+          
+      } catch (error) {
+          console.log(error.message);
+        }
+
+    }
+    fetchData();
+  }, [  ]);
 
   const [mostrarCompleto, setMostrarCompleto] = useState(false);
 

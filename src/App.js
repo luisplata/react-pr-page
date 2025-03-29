@@ -5,7 +5,9 @@ import ArticleDetails from "./pages/ArticleDetails";
 import Feed from "./pages/Feed";
 import Records from "./pages/Records.js";
 import "./App.css";
-import Dashboard from "./pages/Dashboard.js";
+import DashboardLogin from "./pages/DashboardLogin.js";
+import DashboardMain from "./pages/DashboardMain.js";
+import { AuthProvider } from "./context/AuthProvider.js";
 
 
 const App = () => {
@@ -20,15 +22,18 @@ const App = () => {
       setDarkMode();
   }
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/model/:id" element={<ArticleDetails />} />
-        <Route path="/feed/" element={<Feed />} />
-        <Route path="/records/" element={<Records />} />
-        <Route path="/dashboard/" element={<Dashboard />} />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/model/:id" element={<ArticleDetails />} />
+          <Route path="/feed/" element={<Feed />} />
+          <Route path="/records/" element={<Records />} />
+          <Route path="/dashboard/" element={<DashboardLogin />} />
+          <Route path="/dashboard/main" element={<DashboardMain />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 };
 
