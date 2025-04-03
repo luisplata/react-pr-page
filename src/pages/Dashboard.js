@@ -289,7 +289,7 @@ const Dashboard = () => {
                       form === 0 && (
                           <div className="d-flex justify-content-center">
                               <div className="d-flex flex-column justify-content-center">
-                                  <button className="btn general-btn m-1" onClick={() => {setForm(1)}}>Crear Modelo</button>
+                                  {/*<button className="btn general-btn m-1" onClick={() => {setForm(1)}}>Crear Modelo</button>*/}
                                   <button className="btn general-btn m-1" onClick={() => {setForm(2)}}>Actualizar</button>
                               </div>
                           </div>
