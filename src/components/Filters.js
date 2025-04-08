@@ -1,6 +1,9 @@
 import React, { useState, useRef } from "react";
 
-const Filters = ({ setFilters, zones, categories = ["Categoria 1", "Categoria 2", "Categoria 3"] }) => {
+const Filters = ({ setFilters, zones}) => {
+
+    const possibleCategory = ["dama", "virtual", "trans", "caballero"];
+
     const [searchName, setSearchName] = useState("");
     const [selectedZone, setSelectedZone] = useState("");
     const [selectedCategories, setSelectedCategories] = useState([]);
@@ -162,7 +165,7 @@ const Filters = ({ setFilters, zones, categories = ["Categoria 1", "Categoria 2"
                         left: `${getFilterPosition("category").left}px`,
                     }}
                 >
-                    {categories.map((category, index) => (
+                    {possibleCategory.map((category, index) => (
                         <div key={index} className="form-check">
                             <input
                                 className="form-check-input model-tag"

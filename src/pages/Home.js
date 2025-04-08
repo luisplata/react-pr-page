@@ -18,21 +18,6 @@ const Home = () => {
     }, []);
 
     const articles = data;
-    const possibleCategory = ["Dama", "Virtual", "Trans", "Caballero"];
-
-    function getTags (){
-        if (articles){
-            const tagsValues = []
-            for (let article of articles){
-                for (let tag of article.tags){
-                    let tagName = tag.tipo.toLowerCase();
-                    if((tagName.includes("servicios") || tagName.includes("fantasia")) && !tagsValues.includes(tag.valor))
-                        tagsValues.push(tag.valor);
-                }
-            }
-            return tagsValues;
-        }
-    }
 
     function getZones (){
         if (articles){
@@ -98,7 +83,7 @@ const Home = () => {
                 <h3>Modelos</h3>
                 
             </div>
-            <Filters setFilters={setFilters} zones = {articles? getZones() : ["Zona 1", "Zona 2", "Zona 3"]} categories = {possibleCategory}/>
+            <Filters setFilters={setFilters} zones = {articles? getZones() : ["Zona 1", "Zona 2", "Zona 3"]}/>
             <ArticleList quality="Disponibles" articles={filteredArticles} />
             <Footer></Footer>    
         </div>
