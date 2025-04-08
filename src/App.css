@@ -45,6 +45,7 @@
   --special-background-color: rgba(3, 128, 147, 0.4);
   --tag-color: #656565;
   --tag-bg-color: #eff0f5;
+  --contrast-color : rgb(161, 161, 161);
 }
 
 [data-theme="dark"] {
@@ -53,6 +54,7 @@
   --panel-bg-color: #242526;
   --tag-color: #a9a9a9;
   --tag-bg-color: #202123;
+  --contrast-color : rgb(102, 102, 102);
 }
 
 body {
@@ -71,6 +73,22 @@ body {
   width: auto;
   background-color: var(--special-background-color);
   color: var(--special-color);
+}
+
+.general-input{
+  background-color: transparent;
+  border: solid;
+  border-radius: 25px;
+  border-color: var(--contrast-color);
+  border-width: 2px;
+  margin: 5px 0px;
+  padding: 5px 10px;
+  color: var(--tag-color);
+}
+
+.general-link{
+  color: var(--special-color);
+  text-decoration: none;
 }
 
 .input-tag{

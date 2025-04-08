@@ -2,12 +2,9 @@ import React from "react";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import ArticleDetails from "./pages/ArticleDetails";
-import Feed from "./pages/Feed";
-import Records from "./pages/Records.js";
 import "./App.css";
-import DashboardLogin from "./pages/DashboardLogin.js";
-import DashboardMain from "./pages/DashboardMain.js";
-import { AuthProvider } from "./context/AuthProvider.js";
+import ModelDashboard from "./pages/ModelDashboard";
+import AgeVerificationModal from "./components/AgeVerificationModal";
 
 
 const App = () => {
@@ -22,18 +19,14 @@ const App = () => {
       setDarkMode();
   }
   return (
-    <AuthProvider>
       <Router>
+        <AgeVerificationModal />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/model/:id" element={<ArticleDetails />} />
-          <Route path="/feed/" element={<Feed />} />
-          <Route path="/records/" element={<Records />} />
-          <Route path="/dashboard/" element={<DashboardLogin />} />
-          <Route path="/dashboard/main" element={<DashboardMain />} />
+          <Route path="/modeldashboard" element={<ModelDashboard />} />
         </Routes>
       </Router>
-    </AuthProvider>
   );
 };
 
