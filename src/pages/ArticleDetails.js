@@ -41,7 +41,11 @@ const ArticleDetails = () => {
       setCoords(dataCoords.valor);
       setMapLabel(`${data.tags.find(tag => tag.tipo === "ciudad").valor}, ${data.tags.find(tag => tag.tipo === "nacionalidad").valor}`)
     } 
-
+    const horario = data.tags.find(tag => tag.tipo === "horario");
+    if (horario){
+      const { horaInicio: hi, horaFin: hf, diasSeleccionados: ds } = parseAvailabilityString(horario.valor);
+      data.horario = toReadableString(hi, hf, ds);
+    }
     setData(data);
   }
 
@@ -164,12 +168,8 @@ const ArticleDetails = () => {
       else if (prop.tipo === "metodo_de_pago"){
         subServices.find(item => item.name === "Metodos de Pago").list.push(prop.valor)
       }
-      else if (prop.tipo === "horario"){
-        const { horaInicio: hi, horaFin: hf, diasSeleccionados: ds } = parseAvailabilityString(prop.valor);
-        displayedTags.push({tipo:prop.tipo, valor: toReadableString(hi, hf, ds)})
-      }
       else if (!propTipo.includes("nombre") && !propTipo.includes("categoria") && !propTipo.includes("about_me") && 
-      !propTipo.includes("kyc") && !propTipo.includes("tel") && !propTipo.includes("views")){
+      !propTipo.includes("kyc") && !propTipo.includes("tel") && !propTipo.includes("views") && !prop.tipo.includes("horario")){
         displayedTags.push(prop);
       }
     }

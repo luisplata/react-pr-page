@@ -76,7 +76,7 @@ const Home = () => {
                 }
             }
         }
-        else if(article.media.length > 0) matchesCategories = true;
+        else if(article.media.length >= 0) matchesCategories = true;
         let near = false;
         if (filters.distance > 0 && location){
             
@@ -89,6 +89,11 @@ const Home = () => {
             }
         }
         else near = true;
+        console.log(`Name:${matchesName}`);
+        console.log(`Zone:${matchesZone}`);
+        console.log(`Categories:${matchesCategories}`);
+        console.log(`near:${near}`);
+        
 
         return matchesName && matchesZone && matchesCategories && near;
     });
