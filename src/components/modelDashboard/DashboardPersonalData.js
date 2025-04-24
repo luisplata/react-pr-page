@@ -4,9 +4,11 @@ import DashboardDropDown from "./DashboardDropDown";
 import DashboardMapCheckBoxes from "./DashboardMapCheckBoxes";
 import DashboardTextArea from "./DashboardTextArea";
 import PaymentMethodsSelector from "./PaymentMethodsSelector";
+import { getCookie } from "../../utils/cookies";
+import BaseModal from "../BaseModal";
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-export default function DashboardPersonalData ({hasDafault, data}){
+export default function DashboardPersonalData ({hasDafault, data, id}){
     const categories = ["Dama", "Virtual", "Dama Virtual", "Trans", "Trans Virtual", "Caballero de Compañia", "Caballero Virtual", "Masajista"];
     const services = ["Presencial", "A Domicilio", "Virtual", "Masajista", "Streaptease"];
     const depilations = ["Si", "No", "Rebajados"];
@@ -22,6 +24,8 @@ export default function DashboardPersonalData ({hasDafault, data}){
     const aditionals = ["Eyaculación Cuerpo", "Eyaculación Pecho", "Eyaculación Facial", "Mujeres y Hombres", "Atención a Parejas", "Trios M/H/M", "Trios H/M/H", 
         "Lésbicos", "Poses varias", "Besos", "Bailes"];
     const days = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
+    const uniqueTypes = ["edad", "estatura", "peso", "medidas", "nacionalidad", "about_me", "cabello", "ojos", "piel", "depilacion", "cuerpo", "busto", 
+        "cola", "biotipo", "categoria", "ciudad", "tel_whatssapp", "tel_telegram", "KYC_name", "KYC_date", "KYC_ID", "mapa"];
     
 
     const [showedDropdown, setShowedDropdown] = useState(0);
@@ -32,6 +36,12 @@ export default function DashboardPersonalData ({hasDafault, data}){
 
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedCountry, setSelectedCountry] = useState("");
+    useEffect(()=>{
+        if (Array.isArray(countries) && countries.length > 0 && selectedCountry){
+            getCitiesByCountry(countries.find(f => f.name === selectedCountry).code);
+        }
+    }, [countries, selectedCountry]);
+    
     const [selectedCity, setSelectedCity] = useState("");
     const [selectedDepilation, setSelectedDepilation] = useState("");
     const [selectedBody, setSelectedBody] = useState("");
@@ -60,9 +70,26 @@ export default function DashboardPersonalData ({hasDafault, data}){
     const [bodyMeasurements, setBodyMeasurements] = useState({busto:"", cintura:"", cadera:""});
     const [paymentMethods, setPaymentMethods] = useState([]);
 
+    const [horaInicio, setHoraInicio] = useState("");
+    const [horaFin, setHoraFin] = useState("");
+    const [diasSeleccionados, setDiasSeleccionados] = useState([]);
+
+    const toggleDia = (dia) => {
+        setDiasSeleccionados((prev) =>
+            prev.includes(dia)
+                ? prev.filter((d) => d !== dia)
+                : [...prev, dia]
+        );
+    };
+
     const [fullName, setFullName] = useState("");
     const [birthDate, setBirthDate] = useState("");
     const [idDocument, setIdDocument] = useState("");
+
+    const [modifiesModal, setModifiesModal] = useState(false);
+    const toggleModifiesModal = ()=> {    
+        setModifiesModal(!modifiesModal);
+    }
 
     useEffect(() => {
         const handleKeyDown = (event) => {
@@ -70,53 +97,52 @@ export default function DashboardPersonalData ({hasDafault, data}){
                 handleClickDropDown(0);
             }
         };
-        const getCountries = () =>{
-            fetch('https://restcountries.com/v3.1/all')
-            .then(response => response.json())
-            .then(data => {
-                const countries = data
-                .map(country => ({
-                name: country.name.common,
-                code: country.cca2
-                })).sort((a, b) => a.name.localeCompare(b.name));
-                setCountries(countries);
-            })
-            .catch(error => console.error('Error al obtener los países:', error));
-        }
-
-  //      if(hasDafault) rewriteDefautl();
+        getCountries();
         getModelData();
 
         document.addEventListener("keydown", handleKeyDown);
-        getCountries();
 
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
         };
     }, []);
 
-    const rewriteDefautl = ()=>{
-        data = {
-            nombre: "",
-            about: "",
-            horario:"",
-            tarifa:"",
-            whatsapp: "",
-            telegram: "",
-            mapa: "",
-            user_id: 1,
-            is_visible: true,
-            tags: [],
-            media: [],
-        }
+    const getCountries = () =>{
+        fetch('https://restcountries.com/v3.1/all')
+        .then(response => response.json())
+        .then(data => {
+            const countries = data
+            .map(country => ({
+            name: country.name.common,
+            code: country.cca2
+            })).sort((a, b) => a.name.localeCompare(b.name));
+            setCountries(countries);
+        })
+        .catch(error => console.error('Error al obtener los países:', error));
+    }
+
+    function formatAvailabilityString(horaInicio, horaFin, diasSeleccionados) {
+        
+        return `${horaInicio}|${horaFin}|${diasSeleccionados.sort().join(",")}`;
+    }
+
+    function parseAvailabilityString(str) {
+        const [horaInicio, horaFin, diasStr] = str.split("|");
+        const diasSeleccionados = diasStr ? diasStr.split(",") : [];
+        setHoraInicio(horaInicio);
+        setHoraFin(horaFin);
+        setDiasSeleccionados(diasSeleccionados);
     }
 
     const getModelData = () => {
-        setModelName(data.nombre);
+        if (hasDafault) return;
+        
+        setModelName(data.tags.find((a)=>a.tipo === "nombre")?.valor);
         setAge(data.tags.find((a)=>a.tipo === "edad")?.valor);
         setHeight(data.tags.find((a)=>a.tipo === "estatura")?.valor);
         setWeight(data.tags.find((a)=>a.tipo === "peso")?.valor);
         if (data.tags.find((a)=>a.tipo === "medidas")) parseMeasurements(data.tags.find((a)=>a.tipo === "medidas")?.valor);
+        setSelectedCountry(data.tags.find((a)=>a.tipo === "nacionalidad")?.valor);
         setDescription(data.tags.find((a)=>a.tipo === "about_me")?.valor);
         setHair(data.tags.find((a)=>a.tipo === "cabello")?.valor);
         setEyes(data.tags.find((a)=>a.tipo === "ojos")?.valor);
@@ -134,7 +160,13 @@ export default function DashboardPersonalData ({hasDafault, data}){
         setSelectedVirtuals(data.tags.filter(item=>item.tipo === "servicios_virtuales").map((a)=>a.valor));
         setSelectedAditionals(data.tags.filter(item=>item.tipo === "adicionales").map((a)=>a.valor));
         setSelectedCity(data.tags.find((a)=>a.tipo === "ciudad")?.valor);
-        setWhatsapp(data.tags.find((a)=>a.tipo === "tel_whatssapp")?.valor);
+        if (data.tags.find((a)=>a.tipo === "horario")) parseAvailabilityString(data.tags.find((a)=>a.tipo === "horario").valor )
+        const telTag = data.tags.find((a) => a.tipo === "tel_whatssapp");
+        if (telTag?.valor) {
+            const [ext, tel] = telTag.valor.split("|");
+            setWhatsapp(tel);
+            setWhatsappExtention(ext);
+        }
         setTelegram(data.tags.find((a)=>a.tipo === "tel_telegram")?.valor);
         setPaymentMethods(data.tags.filter(item=>item.tipo === "metodo_de_pago").map((a)=>a.valor));
         setFullName(data.tags.find((a)=>a.tipo === "KYC_name")?.valor);
@@ -164,7 +196,6 @@ export default function DashboardPersonalData ({hasDafault, data}){
         }
     };
 
-
     const handleClickDropDown = (dropDownId)=>{
 
         if (showedDropdown === dropDownId){
@@ -180,17 +211,19 @@ export default function DashboardPersonalData ({hasDafault, data}){
 
     function parseMeasurements(measurementsString) {
         const parts = measurementsString.split("/");
-    
-        return {
+
+        setBodyMeasurements({
             busto: parts[0] || "",
             cintura: parts[1] || "",
             cadera: parts[2] || ""
-        };
+        })
     }
 
-    const buildData = () => {
+    
+
+    const buildData = async () => {
         let tagList = [];
-        data.nombre = modelName;
+        tagList.push({tipo:"nombre", valor:modelName});
         tagList.push({tipo:"edad", valor:age});
         tagList.push({tipo:"estatura", valor:height});
         tagList.push({tipo:"peso", valor:weight});
@@ -212,18 +245,207 @@ export default function DashboardPersonalData ({hasDafault, data}){
         tagList = [...tagList, ...selectedMassages.map(value => ({tipo:"tipo_masajes", valor:value}))];
         tagList = [...tagList, ...selectedVirtuals.map(value => ({tipo:"servicios_virtuales", valor:value}))];
         tagList = [...tagList, ...selectedAditionals.map(value => ({tipo:"adicionales", valor:value}))];
-        tagList.push({tipo:"ciudad", valor:selectedCity});
-        tagList.push({tipo:"tel_whatssapp", valor:whatsapp});
+        tagList.push({tipo:"ciudad", valor:selectedCity});        
+        tagList.push({tipo:"horario", valor:formatAvailabilityString(horaInicio, horaFin, diasSeleccionados)})
+        tagList.push({tipo:"tel_whatssapp", valor:whatsappExtention + "|" + whatsapp});
         tagList.push({tipo:"tel_telegram", valor:telegram});
         tagList = [...tagList, ...paymentMethods.map(value => ({tipo:"metodo_de_pago", valor:value}))];
         tagList.push({tipo:"KYC_name", valor:fullName});
         tagList.push({tipo:"KYC_date", valor:birthDate});
         tagList.push({tipo:"KYC_ID", valor:idDocument});
-        data.tags = tagList;
-
+        //data.tags = tagList;
+        let oldTags = data?.tags ? data.tags : [];
+        const { tagsToAdd, tagsToUpdate, tagsToDelete } = await prepareTagChanges(oldTags, tagList, uniqueTypes);
+        console.log(tagsToAdd);
+        console.log(tagsToUpdate);
+        console.log(tagsToDelete);
+        syncTags(tagsToAdd, tagsToUpdate, tagsToDelete);
     //    uploadData(data);
 
-        console.log(tagList);
+    }
+
+    async function prepareTagChanges(oldTags, newTags, uniqueTypes) {
+        const tagsToAdd = [];
+        const tagsToUpdate = [];
+        const tagsToDelete = [];
+        console.log();
+        
+    
+        const oldMap = new Map();
+        oldTags.forEach(tag => {
+            const key = `${tag.tipo}:${tag.valor}`;
+            oldMap.set(key, tag);
+        });
+    
+        const seenKeys = new Set();
+    
+        newTags.forEach(tag => {
+            if (tag.valor === undefined || tag.valor === "") return;
+    
+            const key = `${tag.tipo}:${tag.valor}`;
+            seenKeys.add(key);
+    
+            if (uniqueTypes.includes(tag.tipo)) {
+                const existing = oldTags.find(t => t.tipo === tag.tipo);
+                if (!existing) {
+                    tagsToAdd.push(tag);
+                } else if (existing.valor !== tag.valor) {
+                    tagsToUpdate.push({ id: existing.id, tipo: tag.tipo, valor: tag.valor });
+                }
+            } else {
+                if (!oldMap.has(key)) {
+                    tagsToAdd.push(tag);
+                }
+            }
+        });
+        
+        const cityTag = tagsToDelete.find(tag => tag.tipo === "ciudad");
+        if (cityTag){
+            const mapTag = newTags.find(tag => tag.tipo === "mapa");
+            if (mapTag)
+                tagsToDelete.push(mapTag);
+        }
+
+        const cityUpdateTag = tagsToUpdate.find(t => t.tipo === "ciudad");
+
+        if (cityUpdateTag) {
+            const coordsTag = oldTags.find(t => t.tipo === "mapa");
+            try {
+                const countryCode = countries.find(f => f.name === selectedCountry)?.code;
+                if (!countryCode) throw new Error("No se encontró el código del país.");
+
+                const city = cityUpdateTag.valor;
+                const country = selectedCountry;
+
+                const coordRes = await fetch(`https://nominatim.openstreetmap.org/search?city=${encodeURIComponent(city)}&country=${encodeURIComponent(country)}&countrycodes=${countryCode}&format=json`);
+                const coordData = await coordRes.json();
+
+                if (!coordData.length) throw new Error("No se encontraron coordenadas para la ciudad especificada.");
+
+                const { lat, lon } = coordData[0];
+
+                if (coordsTag) {
+                    coordsTag.valor = `${lat},${lon}`;
+                    tagsToUpdate.push(coordsTag);
+                    newTags.push(coordsTag);
+                } else {
+                tagsToAdd.push({
+                    tipo: "mapa",
+                    valor: `${lat},${lon}`
+                });
+                }
+
+            } catch (error) {
+                console.warn("No se pudieron obtener nuevas coordenadas:", error);
+                if (coordsTag)
+                    tagsToDelete.push(coordsTag);
+            }
+        }
+
+        oldTags.forEach(tag => {
+            if (tag.tipo === "views") return;
+            const key = `${tag.tipo}:${tag.valor}`;
+            if (uniqueTypes.includes(tag.tipo)) {
+                const stillExists = newTags.find(t => (t.tipo === tag.tipo && t.valor !== undefined && t.valor !== ""));
+                if (!stillExists) {
+                    tagsToDelete.push(tag.id);
+                }
+            } else {
+                if (!seenKeys.has(key)) {
+                    tagsToDelete.push(tag.id);
+                }
+            }
+        });
+    
+        return { tagsToAdd, tagsToUpdate, tagsToDelete };
+    }
+
+    async function syncTags(tagsToAdd, tagsToUpdate, tagsToDelete) {
+        try {
+            if (hasDafault){
+                const response = await fetch(`${API_BASE_URL}create`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        nombre:"jhon doe",
+                        about:"jhon doe",
+                        horario:"jhon doe",
+                        tarifa:"jhon doe",
+                        whatsapp:"jhon doe",
+                        telegram:"jhon doe",
+                        mapa:"jhon doe",
+                        token:getCookie("token")
+                    })
+                });
+                if (!response.ok) throw new Error('Error al crear persona');
+            }
+
+            if (tagsToAdd.length > 0) {
+                const cityTag = tagsToAdd.find(tag => tag.tipo === "ciudad");
+                if (cityTag) {
+                    try {
+                      const countryCode = countries.find(f => f.name === selectedCountry)?.code;
+                      if (!countryCode) throw new Error("No se encontró el código del país.");
+                  
+                      const city = cityTag.valor;
+                      const country = selectedCountry;
+                  
+                      const coordRes = await fetch(`https://nominatim.openstreetmap.org/search?city=${encodeURIComponent(city)}&country=${encodeURIComponent(country)}&countrycodes=${countryCode}&format=json`);
+                      const coordData = await coordRes.json();
+                  
+                      if (!coordData.length) throw new Error("No se encontraron coordenadas para la ciudad especificada.");
+                  
+                      const { lat, lon } = coordData[0];
+                  
+                      tagsToAdd.push({
+                        tipo: "mapa",
+                        valor: `${lat},${lon}`
+                      });
+                  
+                    } catch (error) {
+                      console.warn("No se pudo obtener coordenadas:", error);
+                    }
+                  }
+
+                const response = await fetch(`${API_BASE_URL}tags/add/${data.id}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        tags:tagsToAdd,
+                        token:getCookie("token")
+                    })
+                });
+                if (!response.ok) throw new Error('Error al añadir tags');
+            }
+    
+            if (tagsToUpdate.length > 0) {
+                const response = await fetch(`${API_BASE_URL}tags/update`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        tags:tagsToUpdate,
+                        token:getCookie("token")
+                    })
+                });
+                if (!response.ok) throw new Error('Error al modificar tags');
+            }
+    
+            if (tagsToDelete.length > 0) {
+                const response = await fetch(`${API_BASE_URL}tags/delete`, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        tags:tagsToDelete,
+                        token:getCookie("token")
+                    })
+                });
+                if (!response.ok) throw new Error('Error al eliminar tags');
+            }
+            console.log('Tags sincronizadas correctamente');
+            setModifiesModal(true);
+        } catch (err) {
+            console.error('Error al sincronizar tags:', err.message);
+        }
     }
 
     // const uploadData = async (modelData) => {
@@ -269,7 +491,7 @@ export default function DashboardPersonalData ({hasDafault, data}){
                     setErrorMessage("Tu estatura debe ser entre 0 y 2.5 (metros)");
                     return;
                 }
-                if (!weight || weight < 0 || weight > 2.5){
+                if (!weight || weight < 0 || weight > 250){
                     setErrorMessage("Tu peso debe ser entre 0 y 250 (KG)");
                     return;
                 }
@@ -320,7 +542,7 @@ export default function DashboardPersonalData ({hasDafault, data}){
                     
                 break;
             case 4:
-                if (fullName.length < 5 || fullName.length > 50){
+                if (!fullName || fullName.length < 5 || fullName.length > 50){
                     setErrorMessage("Ingresa un nombre valido");
                     return;
                 }  
@@ -328,7 +550,7 @@ export default function DashboardPersonalData ({hasDafault, data}){
                     setErrorMessage("Ingresa una fecha de nacimiento valida");
                     return;
                 }
-                if (idDocument.length < 8 || idDocument.length > 15){
+                if (!idDocument || idDocument.length < 8 || idDocument.length > 15){
                     setErrorMessage("La informacion de tu documento de identidad debe de ser de entre 8 a 15 caracteres");
                     return;
                 }
@@ -341,6 +563,14 @@ export default function DashboardPersonalData ({hasDafault, data}){
     }    
 
     return(<>
+
+        {modifiesModal && (<>
+            <BaseModal closeModal={()=>window.location.reload()}>
+                <h2 className="bg-base mt-2">Datos Actualizados Correctamente</h2>
+                <p style={{ whiteSpace: "pre-line", textAlign:"center"}} className="text-success mt-3">Es necesario refrescar para seguir navegando</p> 
+                <button className="btn general-btn mb-2" onClick={()=>window.location.reload()}>Refrescar</button>
+            </BaseModal>
+        </>)}
 
         {currentStep === 0 && (<>
             <DashboardInputField text={"Nombre"} placeholder={"Como se verá en tu perfil"} type={"text"} value={modelName} onChange={(e)=>{setModelName(e.target.value)}}/>
@@ -382,8 +612,6 @@ export default function DashboardPersonalData ({hasDafault, data}){
                 onChange={(e)=>{
                     setSelectedCountry(e.target.value);
                     console.log(e.target.value);
-                    
-                    if (e.target.value) {getCitiesByCountry(countries.find(f => f.name === e.target.value).code);}
                 }} 
                 placeHolder={"Selecciona tu nacionalidad"} 
                 itemsToMap={countries.map(country=>country.name)}
@@ -515,8 +743,28 @@ export default function DashboardPersonalData ({hasDafault, data}){
                 />
             </>)}
             <div className="m-auto mt-2 row" style={{width:"70%"}}>
-                <div className="col-md-4 px-1"><p className="m-0 text-center">Disponible desde las:</p><input className="form-select model-tag m-auto mt-2" style={{borderColor: "var(--tag-color)", width:"100%"}} type="time"/></div>
-                <div className="col-md-4 px-1"><p className="m-0 text-center">Hasta las:</p><input className="form-select model-tag m-auto mt-2" style={{borderColor: "var(--tag-color)", width:"100%"}} type="time"/></div>
+                <div className="col-md-4 px-1">
+                    <p className="m-0 text-center">Disponible desde las:</p>
+                    <input 
+                        className="form-select model-tag m-auto mt-2" 
+                        style={{borderColor: "var(--tag-color)", 
+                        width:"100%"}} 
+                        type="time"
+                        value={horaInicio}
+                        onChange={(e) => setHoraInicio(e.target.value)}                    
+                    />
+                </div>
+                <div className="col-md-4 px-1">
+                    <p className="m-0 text-center">Hasta las:</p>
+                    <input 
+                        className="form-select model-tag m-auto mt-2" 
+                        style={{borderColor: "var(--tag-color)", 
+                        width:"100%"}} 
+                        type="time"
+                        value={horaFin}
+                        onChange={(e) => setHoraFin(e.target.value)}   
+                    />
+                </div>
                 <div className="col-md-4 px-1"><p className="m-0 text-center">Los dias:</p>
                     <div className="m-auto mt-2" style={{width:"100%"}}>
                         <button className="form-select model-tag w-100 text-start" style={{borderColor: "var(--tag-color)", margin:"auto"}} onClick={()=>{handleClickDropDown(14);}}>Dias</button>
@@ -531,7 +779,8 @@ export default function DashboardPersonalData ({hasDafault, data}){
                                             className="form-check-input model-tag"
                                             style={{borderColor: "var(--tag-color)"}}
                                             type="checkbox"
-                                            value={day}
+                                            checked={diasSeleccionados.includes(day)}
+                                            onChange={() => toggleDia(day)}
                                         />
                                         <label className="form-check-label">{day}</label>
                                     </div>
@@ -576,7 +825,7 @@ export default function DashboardPersonalData ({hasDafault, data}){
         {currentStep === 4 && (<>
             <DashboardInputField text={"Nombre Completo"} placeholder={"Tu nombre completo real"} type={"text"} 
                 value={fullName} onChange={(e)=>{setFullName(e.target.value)}} maxLength={50}/>
-            <DashboardInputField text={"Fecha de nacimiento"} placeholder={""} type={"date"} value={birthDate} onChange={(e)=>{setBirthDate(e.target.value); console.log(e.target.value);}}/>
+            <DashboardInputField text={"Fecha de nacimiento"} placeholder={""} type={"date"} value={birthDate} onChange={(e)=>{setBirthDate(e.target.value);}}/>
             <DashboardInputField text={"Documento de identidad"} placeholder={"El hash de tu documento de identidad"} 
                 type={"text"} value={idDocument} onChange={(e)=>{setIdDocument(e.target.value)}} maxLength={15}/>
         </>)}

@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import DistanceSlider from "./DistanceSlider";
 
 const Filters = ({ setFilters, zones}) => {
 
@@ -8,6 +9,7 @@ const Filters = ({ setFilters, zones}) => {
     const [selectedZone, setSelectedZone] = useState("");
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [activeFilter, setActiveFilter] = useState(null);
+    const [distance, setDistance] = useState(0);
     const buttonRefs = {
         name: useRef(null),
         zone: useRef(null),
@@ -66,6 +68,14 @@ const Filters = ({ setFilters, zones}) => {
         return { top: 0, left: 0 };
     };
 
+    const handleFilterDistance = (distance) => {
+        setDistance(distance);
+        setFilters((prevFilters) => ({
+            ...prevFilters,
+            distance: distance,
+        }));
+    }
+
     return (
         <div className="container mt-4">
             <div className="d-flex justify-content-start mb-3 ms-3">
@@ -107,6 +117,8 @@ const Filters = ({ setFilters, zones}) => {
                 >
                     Categoría
                 </button>
+
+                <DistanceSlider value={distance} onChange={handleFilterDistance} />
             </div>
 
             {activeFilter === "name" && (

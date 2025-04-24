@@ -24,7 +24,7 @@ export default function PaymentMethodsSelector({onChange, paymentMethods}) {
                         checked={paymentMethods.includes(method.name)}
                         onChange={() => toggleMethod(method.name)}
                         className="position-absolute bottom-0 end-0 form-check-input"
-                        style={{ width: "20px", height: "20px" }}
+                        style={{ width: "20px", height: "20px",}}
                     />
                 </div>
             ))}

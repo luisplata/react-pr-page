@@ -3,11 +3,14 @@ import Filters from "../components/Filters";
 import ArticleList from "../components/ArticleList";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import useUserLocation from "../hooks/useUserLocation";
+import { calcularDistanciaKm } from "../utils/distance";
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const Home = () => {
 
     const [data, setData] = useState([]);
+    const { location, getLocation } = useUserLocation();
 
     useEffect(() => {
                
@@ -18,6 +21,7 @@ const Home = () => {
     }, []);
 
     const articles = data;
+    const getDistance = calcularDistanciaKm();
 
     function getZones (){
         if (articles){
@@ -34,7 +38,12 @@ const Home = () => {
         name: "",
         zone: "",
         categories: [],
+        distance: 0,
     });
+    useEffect(()=>{
+        if (filters.distance > 0 && !location)
+            getLocation();
+    }, [filters])
 
     const filteredArticles = articles.filter((article) => {
 
@@ -68,9 +77,20 @@ const Home = () => {
             }
         }
         else if(article.media.length > 0) matchesCategories = true;
-        //const matchesCategories = categoryValue.
+        let near = false;
+        if (filters.distance > 0 && location){
+            
+            const coords = article.tags.find(tag => tag.tipo === "mapa");
+            if (coords){
+                const [latStr, lonStr] = coords.valor.split(',');
+                const distance = getDistance(location.lat, location.lon, latStr, lonStr);
+                near = distance >= filters.distance;
+                
+            }
+        }
+        else near = true;
 
-        return matchesName && matchesZone && matchesCategories;
+        return matchesName && matchesZone && matchesCategories && near;
     });
 
     return (
@@ -81,7 +101,6 @@ const Home = () => {
             <Header></Header>
             <div className="container ps-5">
                 <h3>Modelos</h3>
-                
             </div>
             <Filters setFilters={setFilters} zones = {articles? getZones() : ["Zona 1", "Zona 2", "Zona 3"]}/>
             <ArticleList quality="Disponibles" articles={filteredArticles} />

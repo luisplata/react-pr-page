@@ -69,6 +69,12 @@ body {
   transition: background-color 0.3s, color 0.3s;
 }
 
+.model-special-tag{
+  background-color: var(--special-background-color);
+  color: var(--special-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
 .general-btn{
   width: auto;
   background-color: var(--special-background-color);
