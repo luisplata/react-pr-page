@@ -6,7 +6,7 @@ const Services = ({ services, subServices }) => {
     <div id="servicios" className="container my-5">
       <h2 className="mb-4">Servicios Ofrecidos</h2>
         {services?.map((services) => (
-          <div className="d-inline-flex px-2 me-1 rounded-3">{services}</div>
+          <div className="d-inline-flex px-2 me-1 rounded-3 model-special-tag">{services}</div>
         ))}
         {subServices?.map((subServices) => (
           <div>
