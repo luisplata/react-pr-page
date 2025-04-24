@@ -1,10 +1,15 @@
 import React, { useState, useRef } from "react";
+import DistanceSlider from "./DistanceSlider";
 
-const Filters = ({ setFilters, zones, categories = ["Categoria 1", "Categoria 2", "Categoria 3"] }) => {
+const Filters = ({ setFilters, zones}) => {
+
+    const possibleCategory = ["dama", "virtual", "trans", "caballero"];
+
     const [searchName, setSearchName] = useState("");
     const [selectedZone, setSelectedZone] = useState("");
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [activeFilter, setActiveFilter] = useState(null);
+    const [distance, setDistance] = useState(0);
     const buttonRefs = {
         name: useRef(null),
         zone: useRef(null),
@@ -63,6 +68,14 @@ const Filters = ({ setFilters, zones, categories = ["Categoria 1", "Categoria 2"
         return { top: 0, left: 0 };
     };
 
+    const handleFilterDistance = (distance) => {
+        setDistance(distance);
+        setFilters((prevFilters) => ({
+            ...prevFilters,
+            distance: distance,
+        }));
+    }
+
     return (
         <div className="container mt-4">
             <div className="d-flex justify-content-start mb-3 ms-3">
@@ -104,6 +117,8 @@ const Filters = ({ setFilters, zones, categories = ["Categoria 1", "Categoria 2"
                 >
                     Categoría
                 </button>
+
+                <DistanceSlider value={distance} onChange={handleFilterDistance} />
             </div>
 
             {activeFilter === "name" && (
@@ -162,7 +177,7 @@ const Filters = ({ setFilters, zones, categories = ["Categoria 1", "Categoria 2"
                         left: `${getFilterPosition("category").left}px`,
                     }}
                 >
-                    {categories.map((category, index) => (
+                    {possibleCategory.map((category, index) => (
                         <div key={index} className="form-check">
                             <input
                                 className="form-check-input model-tag"

@@ -5,6 +5,7 @@ import Galery from "../components/Galery";
 import Services from "../components/Services";
 import Footer from "../components/Footer";
 import { Link } from "react-scroll";
+import InteractiveMap from "../components/InteractiveMap";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const MEDIA_BASE_URL = process.env.REACT_APP_MEDIA_BASE_URL;
@@ -12,23 +13,59 @@ const MEDIA_BASE_URL = process.env.REACT_APP_MEDIA_BASE_URL;
 const ArticleDetails = () => {
   const { id } = useParams();
   
+  const diasSemana = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
+  const abreviaturas = diasSemana.map(d => d.slice(0, 3));
 
   const [data, setData] = useState(null);
+  const [coords, setCoords] = useState();
+  const [mapLabel, setMapLabel] = useState();
 
   useEffect(() => {
     fetch(`${API_BASE_URL}people/${id}`)
       .then((response) => response.json())
-      .then((data) => setData(data))
+      .then((data) => {
+        onDataReceived(data)
+      })
       .catch((error) => console.error("Error al obtener los datos:", error));
   }, []);
 
+  const onDataReceived = (data) => {
+    data.about = data.tags.find((a)=>a.tipo === "about_me")?.valor;
+    data.nombre = data.tags.find((a)=>a.tipo === "nombre")?.valor;
+    const whatsapp = data.tags.find((a)=>a.tipo === "tel_whatssapp")?.valor.replace("|", "");
+    const telegram = data.tags.find((a)=>a.tipo === "tel_telegram")?.valor;
+    data.whatsapp = whatsapp ? whatsapp : "";
+    data.telegram = telegram ? telegram : "";
+    const dataCoords = data.tags.find(tag => tag.tipo === "mapa");
+    if (dataCoords){
+      setCoords(dataCoords.valor);
+      setMapLabel(`${data.tags.find(tag => tag.tipo === "ciudad").valor}, ${data.tags.find(tag => tag.tipo === "nacionalidad").valor}`)
+    } 
+    const horario = data.tags.find(tag => tag.tipo === "horario");
+    if (horario){
+      const { horaInicio: hi, horaFin: hf, diasSeleccionados: ds } = parseAvailabilityString(horario.valor);
+      data.horario = toReadableString(hi, hf, ds);
+    }
+    setData(data);
+  }
+
   useEffect(() => {
-        
-    fetch(`${API_BASE_URL}increment/${id}`)
-      .then((response) => response.json())
-      .then((json) => console.log(json)
-      )
-      .catch((error) => console.error("Error:", error));
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}increment/${id}`);
+  
+        if (!response.ok){
+          throw new Error("Error al buscar persona");
+        }
+  
+        const result = await response.json();
+          
+      } catch (error) {
+          console.log(error.message);
+        }
+
+    }
+    fetchData();
   }, []);
 
   const [mostrarCompleto, setMostrarCompleto] = useState(false);
@@ -47,34 +84,98 @@ const ArticleDetails = () => {
     window.open(`https://t.me/${data?.telegram.replaceAll("@","")}`, '_blank');
   };
 
+  function diasLegibles(dias) {
+    const indices = dias.map(d => diasSemana.indexOf(d)).filter(i => i !== -1).sort((a, b) => a - b);
+  
+    let resultado = [];
+    let inicio = indices[0];
+    let anterior = indices[0];
+  
+    for (let i = 1; i <= indices.length; i++) {
+      if (indices[i] !== anterior + 1) {
+        if (inicio === anterior) resultado.push(abreviaturas[inicio]);
+        else resultado.push(`${abreviaturas[inicio]} - ${abreviaturas[anterior]}`);
+        inicio = indices[i];
+      }
+      anterior = indices[i];
+    }
+  
+    return resultado.join(", ");
+  }
+  
+  function formatearHora(hora) {
+    const [h, m] = hora.split(":").map(Number);
+    const sufijo = h >= 12 ? "pm" : "am";
+    const hora12 = h % 12 || 12;
+    return `${hora12}:${m.toString().padStart(2, "0")} ${sufijo}`;
+  }
+  
+  function toReadableString(horaInicio, horaFin, diasSeleccionados) {
+    const dias = diasLegibles(diasSeleccionados);
+    return `${dias} ${formatearHora(horaInicio)} - ${formatearHora(horaFin)}`;
+  }
+
   const services = [];
-  const subServices = [];
+  const subServices = [{name:"Fantasias", list:[]} ,
+    {name:"Tipo de Oral", list:[] },
+    {name:"Tipos de Masajes", list:[] },
+    {name:"Servicios Virtuales", list:[] },
+    {name:"Servicios Adicionales", list:[] },
+    {name:"Metodos de Pago", list:[] },];
   const displayedTags = [];
+
+  const addSubService = (propTipo, type, name, valor) =>{
+    if(propTipo.includes(type))
+      {
+        let obj = subServices.find(item => item.name === name);
+        if (obj) {
+            obj.list.push(valor);
+        } else {
+            subServices.push({ name: name, list: [valor] });
+        }
+      }
+  }
+
+  function parseAvailabilityString(str) {
+    const [horaInicio, horaFin, diasStr] = str.split("|");
+    const diasSeleccionados = diasStr ? diasStr.split(",") : [];
+    return { horaInicio, horaFin, diasSeleccionados };
+  }
 
   if(data){
     for (let prop of data.tags){
 
       const propTipo = prop.tipo.toLowerCase();
       
-      if (prop.tipo === "Servicios" ){
+      if (prop.tipo === "servicio" ){
         services.push(prop.valor);
       }
-        
-      else if(propTipo.includes("virtuales") || propTipo.includes("adicionales") || propTipo.includes("fantasias") || propTipo.includes("métodos de pago") || 
-        propTipo.includes("masajes") || propTipo.includes("oral") || propTipo.includes("presencial")){
-        let obj = subServices.find(item => item.name === prop.tipo);
-        
-        if (obj) {
-            obj.list.push(prop.valor);
-        } else {
-            subServices.push({ name: prop.tipo, list: [prop.valor] });
-        }
+      else if (prop.tipo === "tipo_fantasia"){
+        subServices.find(item => item.name === "Fantasias").list.push(prop.valor)
       }
-      else{
+      else if (prop.tipo === "tipo_oral"){
+        subServices.find(item => item.name === "Tipo de Oral").list.push(prop.valor)
+      }
+      else if (prop.tipo === "tipo_masajes"){
+        subServices.find(item => item.name === "Tipos de Masajes").list.push(prop.valor)
+      }
+      else if (prop.tipo === "servicios_virtuales"){
+        subServices.find(item => item.name === "Servicios Virtuales").list.push(prop.valor)
+      }
+      else if (prop.tipo === "adicionales"){
+        subServices.find(item => item.name === "Servicios Adicionales").list.push(prop.valor)
+      }
+      else if (prop.tipo === "metodo_de_pago"){
+        subServices.find(item => item.name === "Metodos de Pago").list.push(prop.valor)
+      }
+      else if (!propTipo.includes("nombre") && !propTipo.includes("categoria") && !propTipo.includes("about_me") && 
+      !propTipo.includes("kyc") && !propTipo.includes("tel") && !propTipo.includes("views") && !prop.tipo.includes("horario")){
         displayedTags.push(prop);
       }
     }
   }
+
+  
 
   return (
     <div>
@@ -92,7 +193,7 @@ const ArticleDetails = () => {
                 }}
                 >
                   <img
-                    src={MEDIA_BASE_URL + data?.media[0].file_path}
+                    src={data?.media[0] ? MEDIA_BASE_URL + data?.media[0].file_path : "https://dummyimage.com/300/eee/aaa"}
                     alt="Imagen de la persona"
                     className="rounded-circle"
                     style={{
@@ -165,8 +266,8 @@ const ArticleDetails = () => {
                   </button>
                   )}
                 </div>
-                <h5>Tarifa por hora</h5>
-                <h3>${data?.tarifa}</h3>
+                {/* <h5>Tarifa por hora</h5>
+                <h3>${data?.tarifa}</h3> */}
               </div>
             </div>
           </div>
@@ -185,7 +286,9 @@ const ArticleDetails = () => {
               </div>
             </nav>
 
-
+            {coords && (
+              <InteractiveMap coords={coords}  label={mapLabel}/>
+            )}
             <Galery items={data?.media}/>
             <Services services={services}
                 subServices={subServices} />
