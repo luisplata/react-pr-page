@@ -22,7 +22,7 @@ export default function VisitsBarChart({ data, label }) {
           <XAxis dataKey="label" />
           <YAxis />
           <Tooltip />
-          <Bar dataKey="total_visits" fill="#8884d8" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="total_visits" fill="var(--special-color)" radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>
