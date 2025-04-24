@@ -21,7 +21,7 @@ const Home = () => {
     }, []);
 
     const articles = data;
-    const getDistance = calcularDistanciaKm();
+    const getDistance = calcularDistanciaKm;
 
     function getZones (){
         if (articles){
@@ -88,12 +88,7 @@ const Home = () => {
                 
             }
         }
-        else near = true;
-        console.log(`Name:${matchesName}`);
-        console.log(`Zone:${matchesZone}`);
-        console.log(`Categories:${matchesCategories}`);
-        console.log(`near:${near}`);
-        
+        else near = true;        
 
         return matchesName && matchesZone && matchesCategories && near;
     });
