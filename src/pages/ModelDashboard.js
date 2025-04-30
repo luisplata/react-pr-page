@@ -7,6 +7,7 @@ import { deleteCookie, getCookie } from "../utils/cookies";
 import DashboardPersonalData from "../components/modelDashboard/DashboardPersonalData";
 import RequestUploadMedia from "../components/modelDashboard/RequestUploadMedia";
 import Graphics from "../components/modelDashboard/Graphics";
+import ClientSupport from "../components/modelDashboard/ClientSupport";
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 export default function ModelDashboard (){
@@ -39,10 +40,8 @@ export default function ModelDashboard (){
                     } catch (error) {
                         console.log(error);                        
                     }
-
                 }
             }
-
             isLoggedFetch();
 
         }, []);
@@ -55,11 +54,11 @@ export default function ModelDashboard (){
                 {!isLogged ? (<>Primero debes iniciar sesion</>)
                     : (<>
                         {(fieldSelected === 1) && (<DashboardPersonalData hasDafault={modelData.Persona === undefined} data={modelData.Persona} id={modelData.id}/>)}
-                        {fieldSelected === 2 && (<RequestUploadMedia modelName={modelData.Persona.nombre}/>)}
+                        {fieldSelected === 2 && (<RequestUploadMedia modelName={modelData.Persona?.nombre}/>)}
                         {fieldSelected === 3 && (<>
                             <Graphics />                       
                         </>)}
-                        {fieldSelected === 4 && (<>Soporte a cliente</>)}
+                        {fieldSelected === 4 && (<ClientSupport />)}
                         {fieldSelected === 5 && (<>Preguntas frecuentes</>)}
                 </>)}
             
