@@ -5,7 +5,8 @@ import ArticleDetails from "./pages/ArticleDetails";
 import "./App.css";
 import ModelDashboard from "./pages/ModelDashboard";
 import AgeVerificationModal from "./components/AgeVerificationModal";
-
+import { UserProvider } from "./context/UserContext";
+import AuthHandler from "./components/AuthHandler";
 
 const App = () => {
   const selectedTheme = localStorage.getItem("selectedTheme");
@@ -13,20 +14,24 @@ const App = () => {
   const setDarkMode = () => {
     document.querySelector("body").setAttribute("data-theme", "dark");
     localStorage.setItem("selectedTheme", "dark");
-}
+  };
 
-  if(selectedTheme === "dark"){
-      setDarkMode();
+  if (selectedTheme === "dark") {
+    setDarkMode();
   }
+
   return (
+    <UserProvider>
       <Router>
         <AgeVerificationModal />
+        <AuthHandler />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/model/:id" element={<ArticleDetails />} />
           <Route path="/modeldashboard" element={<ModelDashboard />} />
         </Routes>
       </Router>
+    </UserProvider>
   );
 };
 
