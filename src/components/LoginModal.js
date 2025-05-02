@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import BaseModal from "./BaseModal";
 import { setCookie } from "../utils/cookies";
+import Alert from "react-bootstrap/Alert";
+import Spinner from "react-bootstrap/Spinner";
 
 export default function LoginModal({ closeModal }) {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -30,7 +32,6 @@ export default function LoginModal({ closeModal }) {
                         ? "Correo o contraseña incorrectos"
                         : "Hubo un error al iniciar sesión";
                 setErrorMessage(statusMessage);
-                setLoading(false);
                 return;
             }
 
@@ -41,7 +42,7 @@ export default function LoginModal({ closeModal }) {
 
             setTimeout(() => {
                 window.location.reload();
-            }, 1000);
+            }, 1500);
         } catch (error) {
             setErrorMessage("No se pudo conectar con el servidor.");
             console.error("Error:", error);
@@ -52,26 +53,44 @@ export default function LoginModal({ closeModal }) {
 
     return (
         <BaseModal closeModal={closeModal}>
-            <h2 className="mb-4">Iniciar Sesión</h2>
+            <h2 className="mb-4 text-center">Iniciar Sesión</h2>
+
+            {loading && (
+                <div className="text-center mb-3">
+                    <Spinner animation="border" />
+                </div>
+            )}
+
+            {errorMessage && (
+                <Alert variant="danger" className="alert-glass-danger mb-3 text-center">
+                    {errorMessage}
+                </Alert>
+            )}
+
+            {successfulMessage && (
+                <Alert variant="success" className="alert-glass-success mb-3 text-center">
+                    {successfulMessage}
+                </Alert>
+            )}
 
             {!logged && (
                 <form className="d-flex flex-column align-items-center w-75 px-4">
                     <input
-                        className="form-control mb-3"
+                        className="general-input mb-3 w-100"
                         placeholder="Correo electrónico"
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
                     <input
-                        className="form-control mb-3"
+                        className="general-input mb-3 w-100"
                         placeholder="Contraseña"
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
                     <button
-                        className="btn btn-primary w-100"
+                        className="btn general-btn w-100"
                         type="button"
                         disabled={loading}
                         onClick={logIn}
@@ -79,13 +98,6 @@ export default function LoginModal({ closeModal }) {
                         {loading ? "Ingresando..." : "Entrar"}
                     </button>
                 </form>
-            )}
-
-            {errorMessage && (
-                <p className="text-danger mt-3 text-center">{errorMessage}</p>
-            )}
-            {successfulMessage && (
-                <p className="text-success mt-3 text-center">{successfulMessage}</p>
             )}
         </BaseModal>
     );

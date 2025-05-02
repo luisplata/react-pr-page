@@ -72,7 +72,7 @@ const Galeria = ({ items, userId }) => {
 
         const formData = new FormData();
         formData.append("file", media);
-        formData.append("token", getCookie("token")); // Tu función para obtener el token
+        formData.append("token", getCookie("token"));
 
         const endpoint = isVideo
             ? `${API_BASE_URL}upload/video/${userId}`
@@ -99,7 +99,7 @@ const Galeria = ({ items, userId }) => {
         if (!deleteTarget) return;
         const token = getCookie("token")
         const endpointType = deleteTarget.type === "image" ? "image" : "video";
-        const url = `https://back.agenda.peryloth.com/api/delete/${endpointType}/${userId}/${deleteTarget.id}`;
+        const url = `https://back.agenda.peryloth.com/api/upload/${endpointType}/${deleteTarget.id}`;
 
         try {
             const res = await fetch(url, {

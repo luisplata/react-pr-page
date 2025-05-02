@@ -7,6 +7,7 @@ import ModelDashboard from "./pages/ModelDashboard";
 import AgeVerificationModal from "./components/AgeVerificationModal";
 import { UserProvider } from "./context/UserContext";
 import AuthHandler from "./components/AuthHandler";
+import AdminDashboard from "./pages/AdminDashboard";
 
 const App = () => {
   const selectedTheme = localStorage.getItem("selectedTheme");
@@ -28,7 +29,9 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/model/:id" element={<ArticleDetails />} />
+          <Route path="/modeldashboard/:modelId" element={<ModelDashboard />} />
           <Route path="/modeldashboard" element={<ModelDashboard />} />
+          <Route path="/admindashboard" element={<AdminDashboard />} />
         </Routes>
       </Router>
     </UserProvider>
