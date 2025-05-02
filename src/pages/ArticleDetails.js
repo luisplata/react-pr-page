@@ -9,6 +9,7 @@ import InteractiveMap from "../components/InteractiveMap";
 import BaseModal from "../components/BaseModal";
 import {useUser} from "../context/UserContext";
 import {getCookie} from "../utils/cookies";
+import SubscriptionModal from "../components/SubscriptionModal";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const MEDIA_BASE_URL = process.env.REACT_APP_MEDIA_BASE_URL;
@@ -23,6 +24,7 @@ const ArticleDetails = () => {
   const [coords, setCoords] = useState();
   const [mapLabel, setMapLabel] = useState();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [subscriptionModalOpen, setSubscriptionModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState("");
   const {userRole} = useUser();
@@ -297,6 +299,19 @@ const ArticleDetails = () => {
               </div>
             </div>
           </div>
+
+          {userRole === "Admin" && (<>
+            <div className="d-flex justify-content-center mt-3">
+              <button className="btn general-btn" onClick={()=>setSubscriptionModalOpen(true)}>Agregar Suscripcion</button>
+            </div>
+            <div className="d-flex justify-content-center mt-3">
+            <button className="btn general-btn" onClick={()=>navigate(`/modeldashboard/${data.id}`)}>Modificar Perfil</button>
+          </div>
+          </>)}
+
+          {subscriptionModalOpen && (<>
+            <SubscriptionModal closeModal={()=>setSubscriptionModalOpen(false)} userId={data.user_id}/>
+          </>)}
 
           <div className="container mt-5">
             <nav className="navbar navbar-expand-lg ">

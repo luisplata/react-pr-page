@@ -12,6 +12,7 @@ const AuthHandler = () => {
       
 
       if (!token) {
+        setUserRole("guest");
         return;
       }
 
@@ -19,6 +20,7 @@ const AuthHandler = () => {
         const response = await fetch(`${API_BASE_URL}me?token=${token}`);
         
         if (!response.ok) {
+          setUserRole("guest");
           throw new Error('Token inválido');
         }
 

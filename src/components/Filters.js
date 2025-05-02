@@ -3,7 +3,7 @@ import DistanceSlider from "./DistanceSlider";
 
 const Filters = ({ setFilters, zones}) => {
 
-    const possibleCategory = ["dama", "virtual", "trans", "caballero"];
+    const possibleCategory = ["Dama", "Virtual", "Dama Virtual", "Trans", "Trans Virtual", "Caballero de Compañia", "Caballero Virtual", "Masajista"];
 
     const [searchName, setSearchName] = useState("");
     const [selectedZone, setSelectedZone] = useState("");
