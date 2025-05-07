@@ -89,7 +89,6 @@ const Galeria = ({ items, userId }) => {
             const data = await res.json();
             setMediaItems((prev) => [...prev, data.media]);
             setMedia(null);
-            console.log("Archivo subido:", data);
         } catch (err) {
             console.error("Falló la subida:", err);
         }
@@ -138,14 +137,14 @@ const Galeria = ({ items, userId }) => {
                 <div className="d-flex flex-wrap gap-2 justify-content-center"
                      style={{marginBottom: "10px", gap: "8px"}}>
                     <button
-                        type="button" class="btn"
+                        type="button" className="btn"
                         style={{background: "var(--special-background-color)", color: "var(--special-color)"}}
                         onClick={() => setFilter("all")}
                     >
                         Todos
                     </button>
                     <button
-                        type="button" class="btn"
+                        type="button" className="btn"
                         style={{background: "var(--special-background-color)", color: "var(--special-color)"}}
 
                         onClick={() => setFilter("image")}
@@ -153,7 +152,7 @@ const Galeria = ({ items, userId }) => {
                         Fotos
                     </button>
                     <button
-                        type="button" class="btn"
+                        type="button" className="btn"
                         style={{background: "var(--special-background-color)", color: "var(--special-color)"}}
 
                         onClick={() => setFilter("video")}
@@ -165,7 +164,7 @@ const Galeria = ({ items, userId }) => {
                 <div
                 >
                     {filteredItems?.map((item, index) => (
-                        <button
+                        <div
                             className="mb-5"
                             key={index}
                             onClick={() => {
@@ -228,7 +227,7 @@ const Galeria = ({ items, userId }) => {
                                     <i className="bi bi-trash"></i>
                                 </button>
                             )}
-                        </button>
+                        </div>
                     ))}
                     {userRole === "Admin" && (
                         <>

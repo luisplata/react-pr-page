@@ -5,7 +5,7 @@ const MEDIA_BASE_URL = process.env.REACT_APP_MEDIA_BASE_URL;
 const Article = ({ id, name, description, image }) => {
 
     const navigate = useNavigate();
-    const [modelImage, setModelImage] = useState("");
+    const [modelImage, setModelImage] = useState();
     useEffect(() => {
         setModelImage(image ? MEDIA_BASE_URL + image : "https://www.w3schools.com/howto/img_avatar.png");
     }, [image]);

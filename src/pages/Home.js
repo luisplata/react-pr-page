@@ -29,7 +29,7 @@ const Home = () => {
             for (let article of articles){
                 const zone = article.tags?.find(tag => tag.tipo === "nacionalidad");
                 if (zone && !zones.includes(zone))
-                    zones.push(article.mapa)
+                    zones.push(zone.valor)
             }
             return zones;
         }
@@ -44,14 +44,11 @@ const Home = () => {
     useEffect(()=>{
         if (filters.distance > 0 && !location)
             getLocation();
-    }, [filters])
-
-    console.log(articles)
+    }, [filters]);
 
     const filteredArticles = articles.filter((article) => {
-
         const matchesName =
-            article.nombre.toLowerCase().includes(filters.name.toLowerCase());
+            article.tags?.find(tag => tag.tipo === "nombre")?.valor.toLowerCase().includes(filters.name.toLowerCase());
 
 
         const matchesZone = filters.zone
@@ -65,12 +62,10 @@ const Home = () => {
         {
             if(article.tags.some(tag => tag.tipo === "categoria"))
             {
-                console.log("hayCategoria");
 
                 const categoryValue = article.tags.find(tag => tag.tipo === "categoria").valor;
 
                 for (let category of filters.categories){
-                    console.log(categoryValue);
 
                     if (categoryValue && categoryValue === category){
                         matchesCategories = true;
@@ -98,9 +93,6 @@ const Home = () => {
 
     return (
         <div>
-            {articles.map((item)=>(
-                <div>{}</div>
-            ))}
             <Header></Header>
             <div className="container ps-5">
                 <h3>Modelos</h3>

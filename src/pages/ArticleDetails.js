@@ -56,6 +56,7 @@ const ArticleDetails = () => {
       const {horaInicio: hi, horaFin: hf, diasSeleccionados: ds} = parseAvailabilityString(horario.valor);
       data.horario = toReadableString(hi, hf, ds);
     }
+    else data.horario = "Horario no disponible";
     setData(data);
   }
 
@@ -89,7 +90,6 @@ const ArticleDetails = () => {
   };
 
   const handleTelegramClick = () => {
-    console.log(`https://t.me/${data?.telegram}`);
 
     window.open(`https://t.me/${data?.telegram.replaceAll("@", "")}`, '_blank');
   };
@@ -238,7 +238,7 @@ const ArticleDetails = () => {
                 </div>
                 <div>
                   {displayedTags?.map((tag, index) => (
-                      <div className="model-tag d-inline-flex px-2 me-1 rounded-3" style={{marginBottom: "2px"}}>
+                      <div className="model-tag d-inline-flex px-2 me-1 rounded-3" style={{marginBottom: "2px"}} key={index}>
                         {tag.tipo}&nbsp;
                         {tag.valor && (
                             <strong>{tag.valor}</strong>

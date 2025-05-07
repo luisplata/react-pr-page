@@ -8,6 +8,8 @@ import AgeVerificationModal from "./components/AgeVerificationModal";
 import { UserProvider } from "./context/UserContext";
 import AuthHandler from "./components/AuthHandler";
 import AdminDashboard from "./pages/AdminDashboard";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 const App = () => {
   const selectedTheme = localStorage.getItem("selectedTheme");
@@ -32,6 +34,8 @@ const App = () => {
           <Route path="/modeldashboard/:modelId" element={<ModelDashboard />} />
           <Route path="/modeldashboard" element={<ModelDashboard />} />
           <Route path="/admindashboard" element={<AdminDashboard />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
       </Router>
     </UserProvider>

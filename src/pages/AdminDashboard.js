@@ -50,24 +50,21 @@ export default function AdminDashboard (){
         return array.filter((article) => {
 
             const matchesName =
-                article.nombre.toLowerCase().includes(filters.name.toLowerCase());
+                article.tags?.find(tag => tag.tipo === "nombre")?.valor.toLowerCase().includes(filters.name.toLowerCase());
 
 
             const matchesZone = filters.zone
                 ? article.tags?.find(tag => tag.tipo === "nacionalidad")?.valor === filters.zone
                 : true;
 
-
             let matchesCategories = false;
 
             if (filters.categories.length > 0) {
                 if (article.tags.some(tag => tag.tipo === "categoria")) {
-                    console.log("hayCategoria");
 
                     const categoryValue = article.tags.find(tag => tag.tipo === "categoria").valor;
 
                     for (let category of filters.categories) {
-                        console.log(categoryValue);
 
                         if (categoryValue && categoryValue === category) {
                             matchesCategories = true;

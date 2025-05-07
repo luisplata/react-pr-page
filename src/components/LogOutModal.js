@@ -27,7 +27,6 @@ export default function LogOutModal({ closeModal }) {
             }
 
             const json = await response.json();
-            console.log(json);
 
             deleteCookie("token");
             setSuccess("Sesión cerrada correctamente.");
