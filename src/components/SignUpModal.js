@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import BaseModal from "./BaseModal";
 import Spinner from "react-bootstrap/Spinner";
 
@@ -14,6 +14,11 @@ export default function SignUpModal({ closeModal }) {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const [registered, setRegistered] = useState(false);
+    const nameInputRef = useRef(null);
+    
+    useEffect(() => {
+        if (nameInputRef.current) nameInputRef.current.focus();
+    }, [])
 
     const trySignUp = () => {
         setError("");
@@ -63,7 +68,6 @@ export default function SignUpModal({ closeModal }) {
             }
 
             const json = await response.json();
-            console.log(json);
 
             setSuccess("Te has registrado correctamente.\nAhora puedes ingresar con tus credenciales.");
             setRegistered(true);
@@ -98,8 +102,13 @@ export default function SignUpModal({ closeModal }) {
             )}
 
             {!registered && (
-                <form className="d-flex flex-column align-items-center">
+                <form className="d-flex flex-column align-items-center"
+                      onSubmit={(e) => {
+                          e.preventDefault();
+                          trySignUp();
+                      }}>
                     <input
+                        ref={nameInputRef}
                         className="general-input mb-2"
                         placeholder="Nombre"
                         type="text"
@@ -129,8 +138,7 @@ export default function SignUpModal({ closeModal }) {
                     />
                     <button
                         className="btn general-btn mt-2 w-100"
-                        type="button"
-                        onClick={trySignUp}
+                        type="submit"
                         disabled={loading}
                     >
                         {loading ? "Registrando..." : "Registrarse"}

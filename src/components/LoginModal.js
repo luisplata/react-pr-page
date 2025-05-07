@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import BaseModal from "./BaseModal";
 import { setCookie } from "../utils/cookies";
 import Alert from "react-bootstrap/Alert";
 import Spinner from "react-bootstrap/Spinner";
+import {useNavigate} from "react-router-dom";
 
 export default function LoginModal({ closeModal }) {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -13,6 +14,12 @@ export default function LoginModal({ closeModal }) {
     const [successfulMessage, setSuccessfulMessage] = useState("");
     const [loading, setLoading] = useState(false);
     const [logged, setLogged] = useState(false);
+    const emailInputRef = useRef(null);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (emailInputRef.current) emailInputRef.current.focus();
+    }, [])
 
     const logIn = async () => {
         setSuccessfulMessage("");
@@ -74,8 +81,15 @@ export default function LoginModal({ closeModal }) {
             )}
 
             {!logged && (
-                <form className="d-flex flex-column align-items-center w-75 px-4">
+                <form
+                    className="d-flex flex-column align-items-center w-75 px-4"
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        logIn();
+                    }}
+                >
                     <input
+                        ref={emailInputRef}
                         className="general-input mb-3 w-100"
                         placeholder="Correo electrónico"
                         type="email"
@@ -89,11 +103,15 @@ export default function LoginModal({ closeModal }) {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
+                    <p
+                        onClick={()=>{navigate("/forgot-password")}}
+                        className={"general-link mb-3"}
+                    >
+                        Olvide mi contraseña</p>
                     <button
                         className="btn general-btn w-100"
-                        type="button"
+                        type="submit"
                         disabled={loading}
-                        onClick={logIn}
                     >
                         {loading ? "Ingresando..." : "Entrar"}
                     </button>

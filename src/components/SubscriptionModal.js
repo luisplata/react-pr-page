@@ -1,8 +1,9 @@
-﻿import { useState } from "react";
+﻿import {useEffect, useRef, useState} from "react";
 import BaseModal from "./BaseModal";
-import Spinner from "react-bootstrap/Spinner"; // si usas Bootstrap
+import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 import {getCookie} from "../utils/cookies";
+import {useNavigate} from "react-router-dom";
 
 export default function SubscriptionModal({ closeModal, userId }) {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -10,9 +11,16 @@ export default function SubscriptionModal({ closeModal, userId }) {
     const [errorMessage, setErrorMessage] = useState("");
     const [successfulMessage, setSuccessfulMessage] = useState("");
     const [loading, setLoading] = useState(false);
+    const [canAdd, setCanAdd] = useState(true);
+    const monthsInputRef = useRef(null);
+
+    useEffect(() => {
+        if (monthsInputRef.current) monthsInputRef.current.focus();
+    }, [])
 
     async function handleSubmit() {
         setLoading(true);
+        setCanAdd(false);
         setErrorMessage("");
         setSuccessfulMessage("");
         if (subscription === "") {
@@ -38,8 +46,7 @@ export default function SubscriptionModal({ closeModal, userId }) {
             }
 
             const json = await response.json();
-            console.log(json);
-            setSuccessfulMessage("Suscripción agregada correctamente");
+            setSuccessfulMessage(`Suscripción agregada correctamente \nLa suscripcion caduca en ${json.subscription.expires_at.slice(0, 10)}`);
         } catch (error) {
             setErrorMessage("Error al agregar la suscripción");
         } finally {
@@ -64,33 +71,39 @@ export default function SubscriptionModal({ closeModal, userId }) {
             )}
 
             {successfulMessage && (
-                <Alert variant="success" className="mb-3 alert-glass-success">
+                <Alert variant="success" className="mb-3 alert-glass-success pre-line text-center">
                     {successfulMessage}
                 </Alert>
             )}
 
-            <form className="w-50">
-                <input
-                    className="general-input w-100 mb-3"
-                    type="number"
-                    placeholder="Ingresa los meses de la suscripción"
-                    value={subscription}
-                    onChange={(e) => setSubscription(e.target.value)}
-                />
-                <div className="d-flex justify-content-between">
-                    <button type="button" className="btn general-btn" onClick={closeModal}>
-                        Cancelar
-                    </button>
-                    <button
-                        type="button"
-                        className="btn general-btn"
-                        onClick={handleSubmit}
-                        disabled={loading}
-                    >
-                        Agregar
-                    </button>
+            {canAdd ? (<>
+                <form className="w-50" onSubmit={handleSubmit}>
+                    <input
+                        ref={monthsInputRef}
+                        className="general-input w-100 mb-3"
+                        type="number"
+                        placeholder="Ingresa los meses de la suscripción"
+                        value={subscription}
+                        onChange={(e) => setSubscription(e.target.value)}
+                    />
+                    <div className="d-flex justify-content-between">
+                        <button type="button" className="btn general-btn" onClick={closeModal}>
+                            Cancelar
+                        </button>
+                        <button
+                            type="submit"
+                            className="btn general-btn"
+                            disabled={loading}
+                        >
+                            Agregar
+                        </button>
+                    </div>
+                </form>
+            </>) : (<>
+                <div className={"d-flex justify-content-center w-100"}>
+                    <button type="button" className="btn general-btn" onClick={closeModal}>Cerrar</button>
                 </div>
-            </form>
+            </>)}
         </BaseModal>
     );
 }
