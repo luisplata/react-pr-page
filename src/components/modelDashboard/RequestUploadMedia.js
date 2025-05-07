@@ -7,7 +7,7 @@ export default function RequestUploadMedia ({modelName}) {
 
     return(
     <div className="d-flex flex-column align-items-center">
-        <h2 className="w-75 text-center">Solicitar subida de multimedia</h2>
+        <h2 className="w-75 text-center mb-3">Solicitar subida de multimedia</h2>
         <p className="w-75">Para subir tus fotos y que puedan ser visibles, debes enviar un correo al administrador de la pagina con la o las imagenes anexadas,
             luego de esto pasaran por un proceso de verificacion y recibiras una respuesta dentro de unos dias y se subiran automaticamente.</p>
         <p className="w-75">

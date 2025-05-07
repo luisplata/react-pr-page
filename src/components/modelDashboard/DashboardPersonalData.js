@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import DashboardInputField from "./DashboardInputField";
 import DashboardDropDown from "./DashboardDropDown";
 import DashboardMapCheckBoxes from "./DashboardMapCheckBoxes";
@@ -6,6 +6,8 @@ import DashboardTextArea from "./DashboardTextArea";
 import PaymentMethodsSelector from "./PaymentMethodsSelector";
 import { getCookie } from "../../utils/cookies";
 import BaseModal from "../BaseModal";
+import Spinner from "react-bootstrap/Spinner";
+import Alert from "react-bootstrap/Alert";
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 export default function DashboardPersonalData ({hasDafault, data, id}){
@@ -24,7 +26,7 @@ export default function DashboardPersonalData ({hasDafault, data, id}){
     const aditionals = ["Eyaculación Cuerpo", "Eyaculación Pecho", "Eyaculación Facial", "Mujeres y Hombres", "Atención a Parejas", "Trios M/H/M", "Trios H/M/H", 
         "Lésbicos", "Poses varias", "Besos", "Bailes"];
     const days = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
-    const uniqueTypes = ["edad", "estatura", "peso", "medidas", "nacionalidad", "about_me", "cabello", "ojos", "piel", "depilacion", "cuerpo", "busto", 
+    const uniqueTypes = ["nombre", "edad", "estatura", "peso", "medidas", "nacionalidad", "about_me", "cabello", "ojos", "piel", "depilacion", "cuerpo", "busto",
         "cola", "biotipo", "categoria", "ciudad", "tel_whatssapp", "tel_telegram", "KYC_name", "KYC_date", "KYC_ID", "mapa"];
     
 
@@ -87,9 +89,10 @@ export default function DashboardPersonalData ({hasDafault, data, id}){
     const [idDocument, setIdDocument] = useState("");
 
     const [modifiesModal, setModifiesModal] = useState(false);
-    const toggleModifiesModal = ()=> {    
-        setModifiesModal(!modifiesModal);
-    }
+
+    const [errorUploadMessage, setErrorUploadMessage] = useState("");
+    const [successfulMessage, setSuccessfulMessage] = useState("");
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const handleKeyDown = (event) => {
@@ -123,7 +126,7 @@ export default function DashboardPersonalData ({hasDafault, data, id}){
 
     function formatAvailabilityString(horaInicio, horaFin, diasSeleccionados) {
         
-        return `${horaInicio}|${horaFin}|${diasSeleccionados.sort().join(",")}`;
+        return horaInicio && horaFin && diasSeleccionados? `${horaInicio}|${horaFin}|${diasSeleccionados.sort().join(",")}` : "";
     }
 
     function parseAvailabilityString(str) {
@@ -222,12 +225,17 @@ export default function DashboardPersonalData ({hasDafault, data, id}){
     
 
     const buildData = async () => {
+        setLoading(true);
+        setErrorUploadMessage("");
+        setSuccessfulMessage("");
+        setModifiesModal(true);
         let tagList = [];
         tagList.push({tipo:"nombre", valor:modelName});
         tagList.push({tipo:"edad", valor:age});
         tagList.push({tipo:"estatura", valor:height});
         tagList.push({tipo:"peso", valor:weight});
-        tagList.push({tipo:"medidas", valor:`${bodyMeasurements.busto}/${bodyMeasurements.cintura}/${bodyMeasurements.cadera}`});
+        if (bodyMeasurements.busto && bodyMeasurements.cintura && bodyMeasurements.cadera)
+            tagList.push({tipo:"medidas", valor:`${bodyMeasurements.busto}/${bodyMeasurements.cintura}/${bodyMeasurements.cadera}`});
         tagList.push({tipo:"nacionalidad", valor:selectedCountry});
         tagList.push({tipo:"about_me", valor:description});
         tagList.push({tipo:"cabello", valor:hair});
@@ -247,7 +255,7 @@ export default function DashboardPersonalData ({hasDafault, data, id}){
         tagList = [...tagList, ...selectedAditionals.map(value => ({tipo:"adicionales", valor:value}))];
         tagList.push({tipo:"ciudad", valor:selectedCity});        
         tagList.push({tipo:"horario", valor:formatAvailabilityString(horaInicio, horaFin, diasSeleccionados)})
-        tagList.push({tipo:"tel_whatssapp", valor:whatsappExtention + "|" + whatsapp});
+        if (whatsappExtention && whatsapp) tagList.push({tipo:"tel_whatssapp", valor:whatsappExtention + "|" + whatsapp});
         tagList.push({tipo:"tel_telegram", valor:telegram});
         tagList = [...tagList, ...paymentMethods.map(value => ({tipo:"metodo_de_pago", valor:value}))];
         tagList.push({tipo:"KYC_name", valor:fullName});
@@ -256,9 +264,6 @@ export default function DashboardPersonalData ({hasDafault, data, id}){
         //data.tags = tagList;
         let oldTags = data?.tags ? data.tags : [];
         const { tagsToAdd, tagsToUpdate, tagsToDelete } = await prepareTagChanges(oldTags, tagList, uniqueTypes);
-        console.log(tagsToAdd);
-        console.log(tagsToUpdate);
-        console.log(tagsToDelete);
         syncTags(tagsToAdd, tagsToUpdate, tagsToDelete);
     //    uploadData(data);
 
@@ -268,7 +273,6 @@ export default function DashboardPersonalData ({hasDafault, data, id}){
         const tagsToAdd = [];
         const tagsToUpdate = [];
         const tagsToDelete = [];
-        console.log();
         
     
         const oldMap = new Map();
@@ -377,7 +381,12 @@ export default function DashboardPersonalData ({hasDafault, data, id}){
                         token:getCookie("token")
                     })
                 });
-                if (!response.ok) throw new Error('Error al crear persona');
+                if (!response.ok) {
+                    throw new Error('Error al crear persona');
+                }
+                const json = await response.json();
+                tagsToDelete = json.tags.map(tag => tag.id);
+                data = json;
             }
 
             if (tagsToAdd.length > 0) {
@@ -441,35 +450,15 @@ export default function DashboardPersonalData ({hasDafault, data, id}){
                 });
                 if (!response.ok) throw new Error('Error al eliminar tags');
             }
-            console.log('Tags sincronizadas correctamente');
+            setLoading(false);
             setModifiesModal(true);
+            setSuccessfulMessage("Datos actualizados correctamente \nEs necesario refrescar para seguir navegando");
         } catch (err) {
+            setLoading(false);
+            setErrorUploadMessage(`Error al sincronizar tags: ${err.message}`);
             console.error('Error al sincronizar tags:', err.message);
         }
     }
-
-    // const uploadData = async (modelData) => {
-    //     try {
-    //         const response = await fetch(`${API_BASE_URL}login`, {
-    //             method: "POST",
-    //             headers: {"Content-Type": "application/json"},
-    //             body: JSON.stringify(requestBody),
-    //         });
-
-    //         if (!response.ok){
-    //             setErrorMessage(response.status);
-    //             throw new Error(`Error: ${response.status}`);
-    //         }
-    //         const json = await response.json();
-    //         console.log(json);
-    //         setSuccessfulMesage("Has iniciado sesion correctamente");
-    //         setLogged(true);
-    //         setCookie("token", json.token);
-    //         window.location.reload();
-    //     } catch (error) {
-    //         console.error("Error:", error);
-    //     }
-    // }
 
     const nextStep = ()=>{
         setErrorMessage("");
@@ -565,10 +554,40 @@ export default function DashboardPersonalData ({hasDafault, data, id}){
     return(<>
 
         {modifiesModal && (<>
-            <BaseModal closeModal={()=>window.location.reload()}>
-                <h2 className="bg-base mt-2">Datos Actualizados Correctamente</h2>
-                <p style={{ whiteSpace: "pre-line", textAlign:"center"}} className="text-success mt-3">Es necesario refrescar para seguir navegando</p> 
-                <button className="btn general-btn mb-2" onClick={()=>window.location.reload()}>Refrescar</button>
+            <BaseModal>
+                <h2 className="bg-base mt-2 mb-4">Actualizacion de datos</h2>
+                {loading && (
+                    <div className="text-center mb-3">
+                        <Spinner animation="border" />
+                    </div>
+                )}
+
+                {errorMessage && (
+                    <Alert variant="danger" className="alert-glass-danger mb-3 text-center">
+                        {errorMessage}
+                    </Alert>
+                )}
+
+                {successfulMessage && (
+                    <Alert
+                        variant="success"
+                        className="alert-glass-success mb-3 text-center"
+                        style={{ whiteSpace: "pre-line" }}
+                    >
+                        {successfulMessage}
+                    </Alert>
+                )}
+
+                {!loading && !errorMessage && successfulMessage && (
+                    <div className="d-flex justify-content-center">
+                        <button
+                            className="btn general-btn"
+                            onClick={()=>window.location.reload()}
+                        >
+                            Refrescar
+                        </button>
+                    </div>
+                )}
             </BaseModal>
         </>)}
 
@@ -611,7 +630,6 @@ export default function DashboardPersonalData ({hasDafault, data, id}){
                 value={selectedCountry} 
                 onChange={(e)=>{
                     setSelectedCountry(e.target.value);
-                    console.log(e.target.value);
                 }} 
                 placeHolder={"Selecciona tu nacionalidad"} 
                 itemsToMap={countries.map(country=>country.name)}
