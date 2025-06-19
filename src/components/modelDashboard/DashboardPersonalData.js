@@ -111,7 +111,7 @@ export default function DashboardPersonalData ({hasDafault, data, id}){
     }, []);
 
     const getCountries = () =>{
-        fetch('https://restcountries.com/v3.1/all')
+        fetch('https://restcountries.com/v3.1/all?fields=name')
         .then(response => response.json())
         .then(data => {
             const countries = data
@@ -119,6 +119,7 @@ export default function DashboardPersonalData ({hasDafault, data, id}){
             name: country.name.common,
             code: country.cca2
             })).sort((a, b) => a.name.localeCompare(b.name));
+            console.log(countries);
             setCountries(countries);
         })
         .catch(error => console.error('Error al obtener los países:', error));
