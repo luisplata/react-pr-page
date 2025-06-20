@@ -24,6 +24,7 @@ const Home = () => {
     } = useLocationService();
 
     const [locationDetailsResult, setLocationDetailsResult] = useState(null); // Estado para guardar el resultado de getLocationDetails
+    const [cities, setCities] = useState([]); // Nuevo estado para las ciudades únicas
 
     // Efecto para obtener la ubicación inicial al montar el componente
     useEffect(() => {
@@ -56,6 +57,9 @@ const Home = () => {
         fetch(`${API_BASE_URL}people`)
             .then((response) => {
                 if (!response.ok) {
+                    console.error(`Error al obtener artículos: ${response.status} - ${response.statusText}`);
+                    // Intentar leer el cuerpo del error si está disponible
+                    response.text().then(text => console.error('Cuerpo del error:', text));
                     throw new Error(`Error al obtener artículos: ${response.status}`);
                 }
                 return response.json();
@@ -68,6 +72,20 @@ const Home = () => {
     }, []); // Array de dependencias vacío para que se ejecute solo una vez al montar
 
     const articles = data; // La lista original de artículos
+
+    // Efecto para extraer ciudades únicas cuando los datos cambian
+    useEffect(() => {
+        if (data && data.length > 0) {
+            const uniqueCities = new Set();
+            data.forEach(person => {
+                const cityTag = person.tags?.find(tag => tag.tipo === "ciudad");
+                if (cityTag && cityTag.valor) {
+                    uniqueCities.add(cityTag.valor);
+                }
+            });
+            setCities(Array.from(uniqueCities));
+        }
+    }, [data]); // Este efecto depende de los datos
 
     // Función auxiliar para obtener las zonas (nacionalidades) de los artículos
     const getZones = useCallback(() => {
@@ -88,6 +106,7 @@ const Home = () => {
         zone: "",
         categories: [],
         distance: 0,
+        city: "", // Nuevo campo para el filtro de ciudad
     });
 
     // Efecto para manejar la obtención de ubicación si el filtro de distancia es activado
@@ -188,8 +207,14 @@ const Home = () => {
             }
         }
 
+        // Filtro por ciudad
+        const cityTag = article.tags?.find(tag => tag.tipo === "ciudad");
+        const matchesCity = filters.city
+            ? cityTag?.valor?.toLowerCase().includes(filters.city.toLowerCase()) // Filtrar por inclusión de texto, no coincidencia exacta
+            : true; // Si el filtro de ciudad está vacío, todos coinciden
+
         // Un artículo pasa todos los filtros si todas las condiciones son verdaderas
-        return matchesName && matchesZone && matchesCategories && isNear;
+        return matchesName && matchesZone && matchesCategories && isNear && matchesCity;
     });
 
     // Opcional: Mostrar estado de carga y error del servicio de ubicación en la UI
@@ -210,6 +235,7 @@ const Home = () => {
             <Filters
                 setFilters={setFilters}
                 zones={articles ? getZones() : ["Cargando zonas..."]} // Mostrar mensaje de carga si no hay artículos
+                cities={cities} // Pasar las ciudades únicas como prop
             // Pasa la ubicación y ciudad al componente Filters si necesita mostrarlas o usarlas internamente
             // currentLocation={location}
             // currentCityName={cityName}
