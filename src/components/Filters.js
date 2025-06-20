@@ -86,6 +86,16 @@ const Filters = ({ setFilters, zones }) => {
         }));
     };
 
+    useEffect(() => {
+        // Aquí pones la función o el código que quieres ejecutar
+        console.log('El valor de distance ha cambiado a:', distance);
+        ejecutarFuncionCuandoCambieDistance(distance);
+    }, [distance]);
+
+    const ejecutarFuncionCuandoCambieDistance = (nuevoValorDistance) => {
+        console.log('Se está ejecutando la función porque distance cambió a:', nuevoValorDistance);
+    };
+
     return (
         <div className="container mt-4">
             <div className="d-flex justify-content-start mb-3 ms-3">
